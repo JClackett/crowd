@@ -36,7 +36,6 @@ var margin = (window.width)*0.1
 var theWidth = (window.width)-margin*2
 
 import MapView from 'react-native-maps';
-// var mapRef = 'mapRef';
 
 var Modal   = require('react-native-modalbox');
 var Button  = require('react-native-button');
@@ -59,29 +58,52 @@ var Event = t.struct({
    Main Page
 ------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-var MapPage = React.createClass({
+class MapPage extends React.Component {
 
   	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
   	   Initializers
   	------------------------------------------------------------------------------------------------------------------------------------------------------ */
+	state = {
+	    initialPosition: 'unknown',
+	    lastPosition: 'unknown',
+	    center: {
+			latitude: 0,
+			longitude: 0
+		},
+		zoom: 14,
+		animated: true,
+  		isOpen: false,
+		swipeToClose: true,
+		sliderValue: 0.3,
+  		name: 'initial',
+  		region: {
+	      	latitude: 0,
+	      	longitude: 0,
+	      	latitudeDelta: 0.0922,
+	      	longitudeDelta: 0.0421,
+	    },
+	    markers: [],
+  	};
 
-	mixins: [Mapbox.Mixin],
+  	watchID: ?number = null;
 
-  	watchID: (null: ?number),
-
-  	componentDidMount: function() {
-
+  	componentDidMount() {
 		navigator.geolocation.getCurrentPosition(
-			(position) => {
-			        	
-			        	this.setState({
-			        		center: {
-			          			latitude: position.coords.latitude,
-			          			longitude: position.coords.longitude
-			        		}
+			(position) => {     	
+
+		        	this.setState({
+		        		center: {
+		          			latitude: position.coords.latitude,
+		          			longitude: position.coords.longitude
+		        		},
+		        		region: {
+					      	latitude: position.coords.latitude,
+		          			longitude: position.coords.longitude,
+		          			latitudeDelta: 0.09,
+		      				longitudeDelta: 0.0421,
+		        		}
 				});
 				this._onMapLoad(this.state.center);
-
 			},
 
 	      		(error) => alert(error.message),
@@ -94,7 +116,11 @@ var MapPage = React.createClass({
 
 	  	// this.refs.join_button.fadeOut(1);
 
-	},
+	}
+
+  	componentWillUnmount() {
+  		navigator.geolocation.clearWatch(this.watchID);
+  	}
 
   	async _loadInitialState() {
 		try {
@@ -122,28 +148,10 @@ var MapPage = React.createClass({
 
 	    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
 
-	},
+	}
 
-  	componentWillUnmount: function() {
-  		navigator.geolocation.clearWatch(this.watchID);
-  	},
 
-  	getInitialState() {
-
-		return {
-			center: {
-				latitude: 0,
-				longitude: 0
-			},
-			zoom: 14,
-			animated: true,
-      		isOpen: false,
-			swipeToClose: true,
-			sliderValue: 0.3,
-      		name: 'initial',
-		}
-
-  	},
+  	
 
   	onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
 	    if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
@@ -159,28 +167,32 @@ var MapPage = React.createClass({
 			});
 	      }
 	    }
-  	},
+  	}
+
+ //  	onRegionChange(region) {
+	//   	this.setState({ region });
+	// }
 
   	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
   	   Modal
   	------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-	openForm: function(id) {
+	openForm(id) {
 		this.refs.form_modal.open();
 		this.setState({create_modal: true});
 		this.refs.create_button.bounceOutDown(1000)
-	},
+	}
 
-	closeForm: function(id) {
+	closeForm(id) {
 		this.refs.form_modal.close();
-	},
+	}
 
-	onFormClosed: function() {
+	onFormClosed() {
 		this.refs.create_button.bounceInUp(800)
 		this.setState({create_modal: false});
-	},
+	}
 
-	openEvent: function(id) {
+	openEvent(id) {
 
 		this._initialise_event(id);
 
@@ -205,7 +217,7 @@ var MapPage = React.createClass({
 
 		this.setState({event_modal: true});
 
-	},
+	}
 
 
 	_initialise_event(event) {
@@ -228,22 +240,22 @@ var MapPage = React.createClass({
 	  		}
 	  	}
 	  	
-	},	
+	}	
 
-	closeEvent: function(id) {
+	closeEvent(id) {
 		this.refs.event_modal.close();
-	},
+	}
 
-	onEventClosed: function(id) {
+	onEventClosed(id) {
 		this.setState({event_modal: false});
 
 		if (this.state.settings_modal == false) {
 			this.refs.create_button.bounceInUp(500);
 			this.refs.join_button.bounceOutDown(500);
 		}
-	},
+	}
 
-  	openSettings: function(id) {
+  	openSettings(id) {
 		this.refs.settings_modal.open();
 		this.setState({settings_modal: true});
 
@@ -254,25 +266,25 @@ var MapPage = React.createClass({
 		else {
 			this.refs.create_button.bounceOutDown(500);
 		}
-	},
+	}
 
-	closeSettings: function(id) {
+	closeSettings(id) {
 		this.refs.settings_modal.close();
-	},	
+	}	
 
-	onSettingsClosed: function() {
+	onSettingsClosed() {
 		this.refs.create_button.bounceInUp(500);
 		this.setState({settings_modal: false});
-	},
+	}
 
-	saveEvent: function () {
+	saveEvent() {
 		// call getValue() to get the values of the form
 		var value = this.refs.form.getValue();
 		if (value) { // if validation fails, value will be null
 			this._createEvent(value);
 			this.refs.form_modal.close();
 		}
-	},
+	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
 	   Create Event
@@ -309,7 +321,7 @@ var MapPage = React.createClass({
 			.done();
 		}).done();
 
-	},
+	}
 
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -327,12 +339,12 @@ var MapPage = React.createClass({
 		.join('&');
 
 		return 'http://localhost:3000/events?' + querystring;
-	},
+	}
 
 	_onMapLoad(center) {
 	  	var query = this._urlForQuery(center);
 	  	this._getEvents(query);
-	},
+	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
 	   Index Events
@@ -368,7 +380,7 @@ var MapPage = React.createClass({
 		  	})
 			.done();
 		}).done();
-	},
+	}
 
 
 
@@ -376,36 +388,32 @@ var MapPage = React.createClass({
 		var VimEvents = [];
 		events.forEach(function(event) {
     		VimEvents.push({
-        		"type": "point",
-        		"coordinates": [event.latitude, event.longitude],
-	        	'id': event.id.toString(),				 	
-		  		annotationImage: {
-	          		url: event.creator.facebook_picture,
-	          		height: 20,
-	          		width: 20,
-		        }
+    			key: event.id,
+        		latitude: event.latitude, 
+        		longitude: event.longitude,			 	
 		    })
 		});
 
 		this.setState({
-			annotations:
+			markers:
   				VimEvents
 		});
 
-	},
+	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
 	   Show Event
 	------------------------------------------------------------------------------------------------------------------------------------------------------ */
 	fetchInfo(event) {
+		console.log(event)
 	  	var infoQuery = this._urlForInfoQuery(event);
 	  	this._getEventInfo(infoQuery);
-	},
+	}
 
 	_urlForInfoQuery(event) {
 		var id = event.id;
 		return 'http://localhost:3000/events/' + id;
-	},
+	}
 
 	_getEventInfo(infoQuery) {
 
@@ -439,14 +447,14 @@ var MapPage = React.createClass({
 			.done();
 		}).done();
 
-	},
+	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
 	   Join Event
 	------------------------------------------------------------------------------------------------------------------------------------------------------ */
 	joinEvent() {
 		AsyncStorage.getItem("access_token").then((value) => {
-			fetch("http://localhost:3000/guests", {
+			fetch("http://localhost:3000/g_getEventInfouests", {
 				method: "POST",
 				headers: {
 					'Accept': 'application/json',
@@ -475,7 +483,7 @@ var MapPage = React.createClass({
 			.done();
 		}).done();
 		
-	},
+	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
 	   Leave event
@@ -511,7 +519,7 @@ var MapPage = React.createClass({
 		  	})
 			.done();
 		}).done();
-	},
+	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
 	   Delete event
@@ -529,7 +537,6 @@ var MapPage = React.createClass({
 					'Content-Type': 'application/json',
 					'Authorization': 'Token token=' + value
 				},
-
 			})
 			.then((response) => {
 				return response.json()
@@ -550,7 +557,7 @@ var MapPage = React.createClass({
 		}).done();
 
 		this.refs.event_modal.close();
-	},
+	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
 	   Invite to Event
@@ -575,7 +582,7 @@ var MapPage = React.createClass({
 				alert('invite fail with error: ' + error);
 			}
 		);
-	},
+	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
 	   Render
@@ -584,31 +591,26 @@ var MapPage = React.createClass({
 
 		return (
 
-	    		<View style={styles.container}>
+    		<View style={styles.container}>
 
-				<Mapbox
-					style={{flex: 1}}
-					direction={0}
-					rotateEnabled={true}
-					scrollEnabled={true}
-					zoomEnabled={true}
-					showsUserLocation={true}
-					ref={mapRef}
-					accessToken={"pk.eyJ1IjoiZ2VvcmdlYm9yZyIsImEiOiJjaWk3bnFqYzEwMDlidm5tMnJyMGVvMTFlIn0.t-lvmWyHHj3EjAypomaztw"}
-					styleURL={this.mapStyles.streets}
-					userTrackingMode={this.userTrackingMode.follow}
-					centerCoordinate={this.state.center}
-					zoomLevel={this.state.zoom}
-					onRegionChange={this.onRegionChange}
-					onRegionWillChange={this.onRegionWillChange}
-					annotations={this.state.annotations}
-					onOpenAnnotation={this.fetchInfo}
-					onRightAnnotationTapped={this.fetchInfo}
-					onUpdateUserLocation={this.onUpdateUserLocation}
-					onLongPress={this.onLongPress}
-					onTap={this.onTap} 
-					attributionButtonIsHidden={false}
-				/>
+	    		<MapView
+	    			style={styles.map}
+		          	region={this.state.region}
+		          	showsUserLocation={true}
+		          	followsUserLocation={true}
+			  	>
+			  		{this.state.markers.map(marker => (
+					    <MapView.Marker
+					    	style={styles.marker}
+					    	key={marker.key}
+					      	coordinate={{
+				              latitude: marker.latitude,
+				              longitude: marker.longitude
+				            }}
+				            onSelect={() => this.fetchInfo}
+					    />
+				  	))}
+				</MapView>
 
 				<TouchableOpacity onPress={this.openSettings} style={{alignItems: 'center'}}>
 				
@@ -693,21 +695,21 @@ var MapPage = React.createClass({
 				{/* ------------------------------------------------------------------------------------------------------------------------------------------------------
 				   Main Buttons
 				------------------------------------------------------------------------------------------------------------------------------------------------------ */}
-				<Animatable.View ref="join_button">
+				{/*<Animatable.View ref="join_button">
 					{loginButton}
 				</Animatable.View>
 
 
 				<Animatable.View ref="create_button">
 					<Button onPress={this.openForm} style={styles.main_button}>What are you up to?</Button>
-				</Animatable.View>
+				</Animatable.View>*/}
 
 				{/* ------------------------------------------------------------------------------------------------------------------------------------------------------
 				   Create Modal
 				------------------------------------------------------------------------------------------------------------------------------------------------------ */}
 
 				<Modal style={styles.form_modal} ref={"form_modal"} swipeToClose={this.state.swipeToClose} onClosed={this.onFormClosed} onOpened={this.onOpen} onClosingState={this.onClosingState} backdropOpacity={0.5}  backdropColor={"white"} >
-					
+									
 					<View style={{width: theWidth, backgroundColor: "#F7F7F7"}}>	
 						
 						<TouchableOpacity onPress={this.closeForm} style={{alignItems: 'center'}}>
@@ -718,7 +720,6 @@ var MapPage = React.createClass({
 							/>
 						
 						</TouchableOpacity>
-
 
 						<TouchableOpacity onPress={this.inviteToEvent} style={{alignItems: 'center'}}>
 						
@@ -746,16 +747,15 @@ var MapPage = React.createClass({
 						
 					</TouchableOpacity>
 
-
 				</Modal>
 
 			</View>
 
 		);
 
-  	},
+  	}
 
-});
+}
 
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -764,14 +764,31 @@ var MapPage = React.createClass({
 
 var styles = StyleSheet.create({
 
+	container: {
+		position: 'absolute',
+	    top: 0,
+	    left: 0,
+	    right: 0,
+	    bottom: 0,
+	    justifyContent: 'flex-end',
+	    alignItems: 'center',
+  	},
+
+  	marker: {
+  		height: 10,
+  		width: 10,
+  	},
+
+  	map: {
+	    position: 'absolute',
+	    top: 0,
+	    left: 0,
+	    right: 0,
+	    bottom: 0,
+ 	},
+
 	icon: {
 		borderRadius: 25
-	},
-
-	container: {
-		flex: 1,
-		justifyContent: 'center',
-
 	},
 
 	form_modal: {
