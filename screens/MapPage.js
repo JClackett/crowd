@@ -93,17 +93,19 @@ class MapPage extends Component {
 		navigator.geolocation.getCurrentPosition(
 			(position) => {     	
 
-		        	this.setState({
-		        		center: {
-		          			latitude: position.coords.latitude,
-		          			longitude: position.coords.longitude
-		        		},
-		        		region: {
-				      	latitude: position.coords.latitude,
-		          			longitude: position.coords.longitude,
-		          			latitudeDelta: 0.09,
-	      				longitudeDelta: 0.0421,
-		        		}
+		        		this.setState({
+			        		center: {
+			          			latitude: position.coords.latitude,
+			          			longitude: position.coords.longitude
+			        		},
+			        		region: {
+					      	latitude: position.coords.latitude,
+			          			longitude: position.coords.longitude,
+			          			latitudeDelta: 0.09,
+		      				longitudeDelta: 0.0421,
+			        		},
+			        	});
+			        	
 				this._onMapLoad(this.state.center);
 			},
 
