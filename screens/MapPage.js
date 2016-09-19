@@ -2,6 +2,8 @@
 
 import React, { Component } from 'react';
 import * as Animatable from 'react-native-animatable';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import theme from '../theme';
 
 import {
 	AppRegistry,
@@ -31,10 +33,6 @@ const {
 	ShareDialog,
 } = FBSDK;
 
-const window = Dimensions.get('window');
-var margin = (window.width)*0.1
-var theWidth = (window.width)-margin*2
-
 import MapView from 'react-native-maps';
 
 var Modal   = require('react-native-modalbox');
@@ -46,11 +44,13 @@ var Form = t.form.Form;
 var LoginPage = require('./LoginPage');
 var loginButton;
 
+// Set up the styling using theme.js
+EStyleSheet.build(theme);
 
 var Event = t.struct({
-  title: t.String,              
-  description: t.maybe(t.String),
-  howLongWillItLast: t.Number,    
+	title: t.String,              
+	description: t.maybe(t.String),
+	howLongWillItLast: t.Number,    
 });
 
 
@@ -66,12 +66,12 @@ class MapPage extends Component {
   	   Initializers
   	------------------------------------------------------------------------------------------------------------------------------------------------------ */
   	constructor(props) {
-	    super(props);
+	    	super(props);
 
-	    this.state = {
-	      	initialPosition: 'unknown',
-		    lastPosition: 'unknown',
-		    center: {
+	    	this.state = {
+		      	initialPosition: 'unknown',
+		    	lastPosition: 'unknown',
+			center: {
 				latitude: 0,
 				longitude: 0
 			},
@@ -82,13 +82,15 @@ class MapPage extends Component {
 			sliderValue: 0.3,
 	  		name: 'initial',
 	  		region: {
-		      	latitude: 0,
-		      	longitude: 0,
-		      	latitudeDelta: 0.0922,
-		      	longitudeDelta: 0.0421,
-		    },
-		    markers: [],
-    	};
+			      	latitude: 0,
+			      	longitude: 0,
+			      	latitudeDelta: 0.0922,
+			      	longitudeDelta: 0.0421,
+			},
+			markers: [],
+			name: 'initial',
+	      		event_guests_pictures: [""]
+    		};
 
   	}	
 
@@ -102,10 +104,10 @@ class MapPage extends Component {
 		          			longitude: position.coords.longitude
 		        		},
 		        		region: {
-					      	latitude: position.coords.latitude,
+				      	latitude: position.coords.latitude,
 		          			longitude: position.coords.longitude,
 		          			latitudeDelta: 0.09,
-		      				longitudeDelta: 0.0421,
+	      				longitudeDelta: 0.0421,
 		        		}
 				});
 				this._onMapLoad(this.state.center);
@@ -151,7 +153,7 @@ class MapPage extends Component {
 
 		this.setState({inviteLinkContent: inviteLinkContent});
 
-	    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+  	  	this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
 
 	}
 
@@ -234,18 +236,27 @@ class MapPage extends Component {
 	  	this.setState({event_creator_name: event.creator.name});
 	  	this.setState({event_creator_picture: event.creator.facebook_picture});
 
+
 	  	// See if current user is a guest of the event, if so, will show the leave button^^^
 		var x;
-
 		for (x in event.users) {
 			var id1 = String(event.users[x].id);
 			var id2 = String(this.state.user_id);
 			if (id1 === id2){
-	  			return this.setState({event_users: true});
+	  			this.setState({event_users: true});
 	  		}
-	  	}
+	  	};
 	  	
-	}	
+	  	var eventGuestsPictureArr = [];
+
+		event.users.slice(0,3).forEach(function(user) {
+	    		eventGuestsPictureArr.push(user.facebook_picture)
+		});
+
+	  	this.setState({event_guests_pictures: eventGuestsPictureArr});
+
+
+	}		
 
 	closeEvent(id) {
 		this.refs.event_modal.close();
@@ -597,61 +608,74 @@ class MapPage extends Component {
 
 		return (
 
-    		<View style={styles.container}>
+    			<View style={styles.container}>
 
-	    		<MapView
-	    			style={styles.map}
-		          	region={this.state.region}
-		          	showsUserLocation={true}
-		          	followsUserLocation={true}
+		    		<MapView
+		    			style={styles.map}
+				          	region={this.state.region}
+				          	showsUserLocation={true}
+				          	followsUserLocation={true}
 			  	>
 
-			  		{this.state.markers.map(marker => (
-					    <MapView.Marker
-					    	style={styles.marker}
-					    	key={marker.key}
-					      	coordinate={{
-				              latitude: marker.latitude,
-				              longitude: marker.longitude
-				            }}
-				            onSelect={() => this.fetchInfo(marker)}
-				            flat= {true}
-				            centerOffset= {{
-				            	x: 11,
-				              	y: -22
-				            }}
-					    >
-					    	<View style={styles.container}>
-						        <View style={styles.marker}>
-						        	<Image 
+				  	{this.state.markers.map(marker => (
+						<MapView.Marker
+						    	style={styles.marker}
+						    	key={marker.key}
+						      	coordinate={{
+						              	latitude: marker.latitude,
+						              	longitude: marker.longitude
+						            }}
+						            onSelect={() => this.fetchInfo(marker)}
+						            flat= {true}
+						            centerOffset= {{
+						            	x: 11,
+						              	y: -22
+						            }}
+						>
+							<View style={styles.container}>
+							        	<View style={styles.marker}>
+								        	<Image 
 										source={require('../map-marker.png')}
 										style={styles.event_marker}
 									/>
-						          	<Image 
+								          	<Image 
 										source={{uri: marker.icon}}
 										style={styles.event_icon}
 									/>
-						        </View>
-					     	</View>
-					    </MapView.Marker>
+								        </View>
+						     	</View>
+						</MapView.Marker>
 				  	))}
 
 				</MapView>
-
 				{/* ------------------------------------------------------------------------------------------------------------------------------------------------------
 				   Event Modal
 				------------------------------------------------------------------------------------------------------------------------------------------------------ */}
 
-				<Modal style={styles.events_modal} ref={"event_modal"} backdropOpacity={0.3} animationDuration={300} swipeToClose={this.state.swipeToClose} onClosed={this.onEventClosed.bind(this)} onOpened={this.onEventOpened} onClosingState={this.onEventClosingState}>
+				<Modal style={styles.events_modal} ref={"event_modal"} backdropOpacity={0.3} animationDuration={300} swipeToClose={this.state.swipeToClose} onClosed={this.onEventClosed} onOpened={this.onEventOpened} onClosingState={this.onEventClosingState}>
+
+					{
+						this.state.event_guests_pictures.map(function(picture, index){
+							return (
+								<Image 
+									key={index}
+									source={{uri: picture}}
+									style={EStyleSheet.child(styles, 'event_guest', index, this.state.event_guests_pictures.length)}
+								/>
+							)
+
+						}.bind(this))
+					}
+
+					<Text style={styles.event_guest_count}>
+						{this.state.event_users_length + " going"}
+					</Text>
+
+
 
 					<Image 
 						source={{uri: this.state.event_creator_picture}}
 						style={styles.event_creator}
-					/>
-
-					<Image 
-						source={{uri: "this.state.event_creator_picture"}}
-						style={styles.event_guest_icon}
 					/>
 
 					<Text style={styles.event_creator_name}>
@@ -674,19 +698,6 @@ class MapPage extends Component {
 				------------------------------------------------------------------------------------------------------------------------------------------------------ */}
 
 				<Modal style={styles.settings_modal} ref={"settings_modal"} entry={"top"} swipeToClose={this.state.swipeToClose} onClosed={this.onSettingsClosed.bind(this)} onOpened={this.onSettingsOpened} onClosingState={this.onClosingState} backdropOpacity={0.5}  backdropColor={"white"} >
-
-					<View style={{width:theWidth, backgroundColor: "#F7F7F7"}}>	
-					
-						<TouchableOpacity onPress={this.closeSettings.bind(this)} style={{alignItems: 'center'}}>
-						
-							<Image 
-								source={{url: "http://www.icon2s.com/wp-content/uploads/2014/07/collapse-arrow3-300x300.png"}}
-								style={styles.arrow_icon}
-							/>
-						
-						</TouchableOpacity>
-
-					</View>
 
 					<Image
 						style={styles.facebook_icon}
@@ -731,24 +742,13 @@ class MapPage extends Component {
 
 				<Modal style={styles.form_modal} ref={"form_modal"} swipeToClose={this.state.swipeToClose} onClosed={this.onFormClosed.bind(this)} onOpened={this.onOpen} onClosingState={this.onClosingState} backdropOpacity={0.5}  backdropColor={"white"} >
 									
-					<View style={{width: theWidth, backgroundColor: "#F7F7F7"}}>	
-						
-						<TouchableOpacity onPress={this.closeForm.bind(this)} style={{alignItems: 'center'}}>
-						
-							<Image 
-								source={{uri: "https://cdn0.iconfinder.com/data/icons/slim-square-icons-basics/100/basics-08-128.png"}}
-								style={styles.arrow_icon}
-							/>
-						
-						</TouchableOpacity>
 
-						<TouchableOpacity onPress={this.inviteToEvent.bind(this)} style={{alignItems: 'center'}}>
-						
-							<Text>Invite</Text>
-						
-						</TouchableOpacity>
+					{/*<TouchableOpacity onPress={this.inviteToEvent.bind(this)} style={{alignItems: 'center'}}>
+					
+						<Text>Invite</Text>
+					
+					</TouchableOpacity>*/}
 
-					</View>
 
 					<View style={{marginTop:30}}>
 
@@ -783,7 +783,7 @@ class MapPage extends Component {
    Styles
 ------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-var styles = StyleSheet.create({
+var styles = EStyleSheet.create({
 
 	container: {
 		position: 'absolute',
@@ -811,11 +811,26 @@ var styles = StyleSheet.create({
 		borderRadius: 25
 	},
 
+  	event_icon: {
+  		height: 33,
+  		width: 33,
+  		borderRadius: 20,
+  	},
+
+  	event_marker: {
+		width: 55,
+		height: 55,
+		position: "absolute",
+		top: -3,
+		left: -11,
+  	},
+
 	form_modal: {
 		alignItems: 'center',
-		height:400,
-		width:theWidth,
-		borderRadius: 2,
+		height:300,
+		width:'$theWidth',
+		borderRadius: 20,
+		backgroundColor: "#FFF",
 		shadowRadius: 2,
 		shadowOffset: {width: 1, height: 1},
 		shadowColor: 'black',
@@ -825,9 +840,9 @@ var styles = StyleSheet.create({
 	events_modal: {
 		alignItems: 'center',
 		height: 250,
-		width:theWidth,
-		backgroundColor: "#FD7865",
-		borderRadius: 20,
+		width:'$theWidth',
+		backgroundColor: "$redColor",
+		borderRadius: 30,
 		shadowRadius: 2,
 		shadowOffset: {width: 1, height: 1},
 		shadowColor: 'black',
@@ -837,7 +852,7 @@ var styles = StyleSheet.create({
 	settings_modal: {
 		alignItems: 'center',
 		height:400,
-		width: theWidth,
+		width: '$theWidth',
 		borderRadius: 2,
 		shadowRadius: 2,
 		shadowOffset: {width: 1, height: 1},
@@ -858,12 +873,12 @@ var styles = StyleSheet.create({
 
 	main_button: {
 		position: 'absolute',
-		backgroundColor: "rgba(253,120,101,0.95)",
+		backgroundColor: "$redColor",
 		color: "white",
-		// textAlign: "center",
+		textAlign: "center",
 		padding: 15,
-		margin: margin,
-		bottom: margin,
+		margin: '$margin',
+		bottom: '$margin',
 		shadowRadius: 2,
 		shadowOffset: {width: 1, height: 1},
 		shadowColor: 'black',
@@ -871,7 +886,7 @@ var styles = StyleSheet.create({
 		letterSpacing: 1,
 		fontSize: 15,
 		fontFamily: 'Helvetica',
-		width: theWidth,
+		width: '$theWidth',
 	},
 
 	delete_button: {
@@ -880,8 +895,8 @@ var styles = StyleSheet.create({
 		color: "white",
 		textAlign: "center",
 		padding: 15,
-		margin: margin,
-		bottom: margin,
+		margin: '$margin',
+		bottom: '$margin',
 		shadowRadius: 2,
 		shadowOffset: {width: 1, height: 1},
 		shadowColor: 'black',
@@ -889,7 +904,7 @@ var styles = StyleSheet.create({
 		letterSpacing: 1,
 		fontSize: 15,
 		fontFamily: 'Helvetica',
-		width: theWidth,
+		width: '$theWidth',
 	},
 
 	settings_button: {
@@ -898,7 +913,7 @@ var styles = StyleSheet.create({
 		shadowOffset: {width: 1, height: 1},
 		shadowColor: 'black',
 		shadowOpacity: 0.45,
-		bottom: 40,
+		bottom: 610,
 		left: 10,
 		width:30,
 		height:30,
@@ -927,20 +942,6 @@ var styles = StyleSheet.create({
   	tick_icon: {
   		width: 60,
   		height: 60,
-  	},
-
-  	event_icon: {
-  		height: 33,
-  		width: 33,
-  		borderRadius: 20,
-  	},
-
-  	event_marker: {
-		width: 55,
-		height: 55,
-		position: "absolute",
-		top: -3,
-		left: -11,
   	},
 
   	event_creator: {
@@ -975,13 +976,34 @@ var styles = StyleSheet.create({
   		fontWeight: "400",
   		marginTop:5,
   	},
+	event_guest: {
+  		position: "absolute",
+  		height: 40,
+  		borderColor: "white",
+  		width: 40,
+  		marginTop: 10,
+  		left: 30,
+  		borderRadius: 20,
+  		borderWidth: 2,
+  		borderColor: "#FFF"
+	},
+	'event_guest:last-child': {
+		left:50,
+	},
+	'event_guest:first-child': {
+		left:10,
+	},
+
+	event_guest_count: {
+  		color: "#FFF",
+  		left: 30,
+		position: 'absolute',
+		marginTop: 50,
+	},
 
 	login: {
 		height: 30,
 		marginTop:120,
 		width:200,
 	},
-
 });
-
-module.exports = MapPage;

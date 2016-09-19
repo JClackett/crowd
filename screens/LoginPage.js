@@ -109,23 +109,19 @@ class LoginPage extends Component {
 	_loadMapPage() {
 		this.props.navigator.push({
 			screen: "Crowd.MapPage",
-		    navigatorStyle: {
-		    	navBarTextColor: '#fff',
-			  	navBarBackgroundColor: '#074E64',
-			  	navBarButtonColor: '#fff',
-		      	statusBarTextColorScheme: 'light'
-		    },
+			navigatorStyle: {
+				navBarTextColor: '#fff',
+				navBarBackgroundColor: '#074E64',
+				navBarButtonColor: '#fff',
+				statusBarTextColorScheme: 'light'
+			},
 			titleImage: require('./../logo.png'),
-		    navigatorButtons: {
-	    		rightButtons: [{
-			        title: 'Inbox', 
-			        id: 'inbox', 
-		      	}],
-		      	leftButtons: [{
-		      		title: 'Settings', 
-			        id: 'settings', 
-		      	}]
-		    },
+			navigatorButtons: {
+				leftButtons: [{
+					title: 'Settings', 
+					id: 'settings', 
+				}]
+			},
 		});
 	};
 
