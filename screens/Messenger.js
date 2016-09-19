@@ -1,7 +1,6 @@
 'use strict';
 
 import React, { Component } from 'react';
-import * as Animatable from 'react-native-animatable';
 import { GiftedChat } from 'react-native-gifted-chat';
 
 import {

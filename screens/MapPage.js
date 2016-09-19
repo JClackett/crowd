@@ -38,13 +38,13 @@ var theWidth = (window.width)-margin*2
 import MapView from 'react-native-maps';
 
 var Modal   = require('react-native-modalbox');
-var Button  = require('react-native-button');
+import Button from 'react-native-button';
 
 var t = require('tcomb-form-native');
 var Form = t.form.Form;
 
 var LoginPage = require('./LoginPage');
-var  loginButton;
+var loginButton;
 
 
 var Event = t.struct({
@@ -58,34 +58,39 @@ var Event = t.struct({
    Main Page
 ------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-class MapPage extends React.Component {
+class MapPage extends Component {
+  	
+  	watchID: ?number = null;
 
   	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
   	   Initializers
   	------------------------------------------------------------------------------------------------------------------------------------------------------ */
-	state = {
-	    initialPosition: 'unknown',
-	    lastPosition: 'unknown',
-	    center: {
-			latitude: 0,
-			longitude: 0
-		},
-		zoom: 14,
-		animated: true,
-  		isOpen: false,
-		swipeToClose: true,
-		sliderValue: 0.3,
-  		name: 'initial',
-  		region: {
-	      	latitude: 0,
-	      	longitude: 0,
-	      	latitudeDelta: 0.0922,
-	      	longitudeDelta: 0.0421,
-	    },
-	    markers: [],
-  	};
+  	constructor(props) {
+	    super(props);
 
-  	watchID: ?number = null;
+	    this.state = {
+	      	initialPosition: 'unknown',
+		    lastPosition: 'unknown',
+		    center: {
+				latitude: 0,
+				longitude: 0
+			},
+			zoom: 14,
+			animated: true,
+	  		isOpen: false,
+			swipeToClose: true,
+			sliderValue: 0.3,
+	  		name: 'initial',
+	  		region: {
+		      	latitude: 0,
+		      	longitude: 0,
+		      	latitudeDelta: 0.0922,
+		      	longitudeDelta: 0.0421,
+		    },
+		    markers: [],
+    	};
+
+  	}	
 
   	componentDidMount() {
 		navigator.geolocation.getCurrentPosition(
@@ -146,28 +151,28 @@ class MapPage extends React.Component {
 
 		this.setState({inviteLinkContent: inviteLinkContent});
 
-	    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
+	    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
 
 	}
 
-
-  	
-
   	onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
 	    if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
-	      if (event.id == 'inbox') { // this is the same id field from the static navigatorButtons definition
-	        this.props.navigator.push({
-				screen: 'Crowd.Messenger', // unique ID registered with Navigation.registerScreentitle: undefined, // navigation bar title of the pushed screen (optional)
-				titleImage: require('./../logo.png'), //navigation bar title image instead of the title text of the pushed screen (optional)
-				passProps: {}, // simple serializable object that will pass as props to the pushed screen (optional)
-				animated: true, // does the push have transition animation or does it happen immediately (optional)backButtonTitle: Back, // override the back button title (optional)
-				backButtonHidden: false, // hide the back button altogether (optional)
-				navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
-				navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
-			});
-	      }
-	    }
-  	}
+	      	if (event.id == 'inbox') { // this is the same id field from the static navigatorButtons definition
+		        this.props.navigator.push({
+					screen: 'Crowd.Messenger', // unique ID registered with Navigation.registerScreentitle: undefined, // navigation bar title of the pushed screen (optional)
+					titleImage: require('./../logo.png'), //navigation bar title image instead of the title text of the pushed screen (optional)
+					passProps: {}, // simple serializable object that will pass as props to the pushed screen (optional)
+					animated: true, // does the push have transition animation or does it happen immediately (optional)backButtonTitle: Back, // override the back button title (optional)
+					backButtonHidden: false, // hide the back button altogether (optional)
+					navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
+					navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
+				});
+      		}
+	      	else if (event.id == 'settings') { // this is the same id field from the static navigatorButtons definition
+				this.openSettings()
+			}
+      	}
+    }
 
  //  	onRegionChange(region) {
 	//   	this.setState({ region });
@@ -200,13 +205,13 @@ class MapPage extends React.Component {
 
 		// Is the user the creator, a guest or not
   		if (this.state.event_creator_id == this.state.user_id) { 
-			loginButton = <Button onPress={this.deleteEvent} style={styles.delete_button}>Delete</Button>;
+			loginButton = <Button onPress={this.deleteEvent.bind(this)} style={styles.delete_button}>Delete</Button>;
 			this.setState({update_button: true});
 		} else if (this.state.event_users == true) {
-			loginButton = <Button onPress={this.leaveEvent} style={styles.main_button}>Leave</Button>;
+			loginButton = <Button onPress={this.leaveEvent.bind(this)} style={styles.main_button}>Leave</Button>;
 			this.setState({update_button: true});
 		} else {
-		  	loginButton = <Button onPress={this.joinEvent} style={styles.main_button}>Crash</Button>;
+		  	loginButton = <Button onPress={this.joinEvent.bind(this)} style={styles.main_button}>Crash</Button>;
 			this.setState({update_button: true});
 		}
 
@@ -385,18 +390,20 @@ class MapPage extends React.Component {
 
 
 	_displayEvents(events) {
-		var VimEvents = [];
+		var Events = [];
 		events.forEach(function(event) {
-    		VimEvents.push({
+    		Events.push({
     			key: event.id,
+    			id: event.id,
         		latitude: event.latitude, 
-        		longitude: event.longitude,			 	
+        		longitude: event.longitude,		
+        		icon: event.creator.facebook_picture 	
 		    })
 		});
 
 		this.setState({
 			markers:
-  				VimEvents
+  				Events
 		});
 
 	}
@@ -405,7 +412,6 @@ class MapPage extends React.Component {
 	   Show Event
 	------------------------------------------------------------------------------------------------------------------------------------------------------ */
 	fetchInfo(event) {
-		console.log(event)
 	  	var infoQuery = this._urlForInfoQuery(event);
 	  	this._getEventInfo(infoQuery);
 	}
@@ -599,6 +605,7 @@ class MapPage extends React.Component {
 		          	showsUserLocation={true}
 		          	followsUserLocation={true}
 			  	>
+
 			  		{this.state.markers.map(marker => (
 					    <MapView.Marker
 					    	style={styles.marker}
@@ -607,25 +614,35 @@ class MapPage extends React.Component {
 				              latitude: marker.latitude,
 				              longitude: marker.longitude
 				            }}
-				            onSelect={() => this.fetchInfo}
-					    />
+				            onSelect={() => this.fetchInfo(marker)}
+				            flat= {true}
+				            centerOffset= {{
+				            	x: 11,
+				              	y: -22
+				            }}
+					    >
+					    	<View style={styles.container}>
+						        <View style={styles.marker}>
+						        	<Image 
+										source={require('../map-marker.png')}
+										style={styles.event_marker}
+									/>
+						          	<Image 
+										source={{uri: marker.icon}}
+										style={styles.event_icon}
+									/>
+						        </View>
+					     	</View>
+					    </MapView.Marker>
 				  	))}
+
 				</MapView>
-
-				<TouchableOpacity onPress={this.openSettings} style={{alignItems: 'center'}}>
-				
-					<Image 
-						style={styles.settings_button}
-						source={{uri: "http://www.freeiconspng.com/uploads/settings-icon-4.png"}}
-					/>
-
-				</TouchableOpacity>
 
 				{/* ------------------------------------------------------------------------------------------------------------------------------------------------------
 				   Event Modal
 				------------------------------------------------------------------------------------------------------------------------------------------------------ */}
 
-				<Modal style={styles.events_modal} ref={"event_modal"} backdropOpacity={0.3} animationDuration={300} swipeToClose={this.state.swipeToClose} onClosed={this.onEventClosed} onOpened={this.onEventOpened} onClosingState={this.onEventClosingState}>
+				<Modal style={styles.events_modal} ref={"event_modal"} backdropOpacity={0.3} animationDuration={300} swipeToClose={this.state.swipeToClose} onClosed={this.onEventClosed.bind(this)} onOpened={this.onEventOpened} onClosingState={this.onEventClosingState}>
 
 					<Image 
 						source={{uri: this.state.event_creator_picture}}
@@ -656,14 +673,14 @@ class MapPage extends React.Component {
 				   Settings Modal
 				------------------------------------------------------------------------------------------------------------------------------------------------------ */}
 
-				<Modal style={styles.settings_modal} ref={"settings_modal"} entry={"top"} swipeToClose={this.state.swipeToClose} onClosed={this.onSettingsClosed} onOpened={this.onSettingsOpened} onClosingState={this.onClosingState} backdropOpacity={0.5}  backdropColor={"white"} >
+				<Modal style={styles.settings_modal} ref={"settings_modal"} entry={"top"} swipeToClose={this.state.swipeToClose} onClosed={this.onSettingsClosed.bind(this)} onOpened={this.onSettingsOpened} onClosingState={this.onClosingState} backdropOpacity={0.5}  backdropColor={"white"} >
 
 					<View style={{width:theWidth, backgroundColor: "#F7F7F7"}}>	
 					
-						<TouchableOpacity onPress={this.closeSettings} style={{alignItems: 'center'}}>
+						<TouchableOpacity onPress={this.closeSettings.bind(this)} style={{alignItems: 'center'}}>
 						
 							<Image 
-								source={{uri: "http://www.icon2s.com/wp-content/uploads/2014/07/collapse-arrow3-300x300.png"}}
+								source={{url: "http://www.icon2s.com/wp-content/uploads/2014/07/collapse-arrow3-300x300.png"}}
 								style={styles.arrow_icon}
 							/>
 						
@@ -684,35 +701,39 @@ class MapPage extends React.Component {
 						style={styles.login}
 						readPermissions={["public_profile", "email", "user_friends"]}
 						onLogoutFinished={ () =>
-							this.props.navigator.replace({
-								component: require('./LoginPage')
+							this.props.navigator.push({
+								screen: 'Crowd.LoginPage', 
+								navigatorStyle: {
+							    	navBarHidden: true,
+							      	statusBarTextColorScheme: 'light'
+							    }
 							})
 						}
-					/>
+						/>
 
 				</Modal>
 
 				{/* ------------------------------------------------------------------------------------------------------------------------------------------------------
 				   Main Buttons
 				------------------------------------------------------------------------------------------------------------------------------------------------------ */}
-				{/*<Animatable.View ref="join_button">
+				<Animatable.View ref="join_button">
 					{loginButton}
 				</Animatable.View>
 
 
 				<Animatable.View ref="create_button">
-					<Button onPress={this.openForm} style={styles.main_button}>What are you up to?</Button>
-				</Animatable.View>*/}
+					<Button onPress={this.openForm.bind(this)} style={styles.main_button}>What are you up to?</Button>
+				</Animatable.View>
 
 				{/* ------------------------------------------------------------------------------------------------------------------------------------------------------
 				   Create Modal
 				------------------------------------------------------------------------------------------------------------------------------------------------------ */}
 
-				<Modal style={styles.form_modal} ref={"form_modal"} swipeToClose={this.state.swipeToClose} onClosed={this.onFormClosed} onOpened={this.onOpen} onClosingState={this.onClosingState} backdropOpacity={0.5}  backdropColor={"white"} >
+				<Modal style={styles.form_modal} ref={"form_modal"} swipeToClose={this.state.swipeToClose} onClosed={this.onFormClosed.bind(this)} onOpened={this.onOpen} onClosingState={this.onClosingState} backdropOpacity={0.5}  backdropColor={"white"} >
 									
 					<View style={{width: theWidth, backgroundColor: "#F7F7F7"}}>	
 						
-						<TouchableOpacity onPress={this.closeForm} style={{alignItems: 'center'}}>
+						<TouchableOpacity onPress={this.closeForm.bind(this)} style={{alignItems: 'center'}}>
 						
 							<Image 
 								source={{uri: "https://cdn0.iconfinder.com/data/icons/slim-square-icons-basics/100/basics-08-128.png"}}
@@ -721,9 +742,9 @@ class MapPage extends React.Component {
 						
 						</TouchableOpacity>
 
-						<TouchableOpacity onPress={this.inviteToEvent} style={{alignItems: 'center'}}>
+						<TouchableOpacity onPress={this.inviteToEvent.bind(this)} style={{alignItems: 'center'}}>
 						
-							<Text>Invite </Text>
+							<Text>Invite</Text>
 						
 						</TouchableOpacity>
 
@@ -738,7 +759,7 @@ class MapPage extends React.Component {
 
 					</View>
 
-					<TouchableOpacity onPress={this.saveEvent} style={{alignItems: 'center'}}>
+					<TouchableOpacity onPress={this.saveEvent.bind(this)} style={{alignItems: 'center'}}>
 						
 						<Image 
 							source={{uri: "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678134-sign-check-128.png"}}
@@ -771,12 +792,11 @@ var styles = StyleSheet.create({
 	    right: 0,
 	    bottom: 0,
 	    justifyContent: 'flex-end',
-	    alignItems: 'center',
   	},
 
   	marker: {
-  		height: 10,
-  		width: 10,
+  		height: 55,
+  		width: 55,
   	},
 
   	map: {
@@ -840,7 +860,7 @@ var styles = StyleSheet.create({
 		position: 'absolute',
 		backgroundColor: "rgba(253,120,101,0.95)",
 		color: "white",
-		textAlign: "center",
+		// textAlign: "center",
 		padding: 15,
 		margin: margin,
 		bottom: margin,
@@ -878,7 +898,7 @@ var styles = StyleSheet.create({
 		shadowOffset: {width: 1, height: 1},
 		shadowColor: 'black',
 		shadowOpacity: 0.45,
-		bottom: 410,
+		bottom: 40,
 		left: 10,
 		width:30,
 		height:30,
@@ -907,6 +927,20 @@ var styles = StyleSheet.create({
   	tick_icon: {
   		width: 60,
   		height: 60,
+  	},
+
+  	event_icon: {
+  		height: 33,
+  		width: 33,
+  		borderRadius: 20,
+  	},
+
+  	event_marker: {
+		width: 55,
+		height: 55,
+		position: "absolute",
+		top: -3,
+		left: -11,
   	},
 
   	event_creator: {
