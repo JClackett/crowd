@@ -121,7 +121,6 @@ class LoginPage extends Component {
 			        id: 'settings', 
 		      	}]
 		    },
-	      	statusBarTextColorScheme: 'light'
 		});
 	};
 
