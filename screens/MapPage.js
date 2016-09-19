@@ -205,13 +205,13 @@ class MapPage extends Component {
 
 		// Is the user the creator, a guest or not
   		if (this.state.event_creator_id == this.state.user_id) { 
-			loginButton = <Button onPress={this.deleteEvent} style={styles.delete_button}>Delete</Button>;
+			loginButton = <Button onPress={this.deleteEvent.bind(this)} style={styles.delete_button}>Delete</Button>;
 			this.setState({update_button: true});
 		} else if (this.state.event_users == true) {
-			loginButton = <Button onPress={this.leaveEvent} style={styles.main_button}>Leave</Button>;
+			loginButton = <Button onPress={this.leaveEvent.bind(this)} style={styles.main_button}>Leave</Button>;
 			this.setState({update_button: true});
 		} else {
-		  	loginButton = <Button onPress={this.joinEvent} style={styles.main_button}>Crash</Button>;
+		  	loginButton = <Button onPress={this.joinEvent.bind(this)} style={styles.main_button}>Crash</Button>;
 			this.setState({update_button: true});
 		}
 
@@ -642,7 +642,7 @@ class MapPage extends Component {
 				   Event Modal
 				------------------------------------------------------------------------------------------------------------------------------------------------------ */}
 
-				<Modal style={styles.events_modal} ref={"event_modal"} backdropOpacity={0.3} animationDuration={300} swipeToClose={this.state.swipeToClose} onClosed={this.onEventClosed} onOpened={this.onEventOpened} onClosingState={this.onEventClosingState}>
+				<Modal style={styles.events_modal} ref={"event_modal"} backdropOpacity={0.3} animationDuration={300} swipeToClose={this.state.swipeToClose} onClosed={this.onEventClosed.bind(this)} onOpened={this.onEventOpened} onClosingState={this.onEventClosingState}>
 
 					<Image 
 						source={{uri: this.state.event_creator_picture}}
