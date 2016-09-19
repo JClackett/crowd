@@ -13,7 +13,6 @@
 		00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302DC1ABCB9D200DB3ED1 /* libRCTNetwork.a */; };
 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
 		00E356F31AD99517003FC87E /* CrowdTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CrowdTests.m */; };
-		0E4D81C4FAF143F6BC0363FB /* libRCTFBSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E18B0672B22647A488A77A7E /* libRCTFBSDK.a */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
 		139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
@@ -30,6 +29,8 @@
 		87B710E71D8854F200BCDA0B /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87B710E41D8854F200BCDA0B /* FBSDKLoginKit.framework */; };
 		87B710E81D8854F200BCDA0B /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87B710E51D8854F200BCDA0B /* FBSDKShareKit.framework */; };
 		87B711051D88597500BCDA0B /* libReactNativeControllers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87B711041D88596100BCDA0B /* libReactNativeControllers.a */; };
+		DBD8E5A31D901CA200586B33 /* libRCTFBSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87B710D81D88549400BCDA0B /* libRCTFBSDK.a */; };
+		DBD8E5A51D90223B00586B33 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBD8E5A41D90223B00586B33 /* Bolts.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -163,7 +164,8 @@
 		87B710E51D8854F200BCDA0B /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		87B710F41D88596100BCDA0B /* ReactNativeControllers.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeControllers.xcodeproj; path = "../node_modules/react-native-controllers/ios/ReactNativeControllers.xcodeproj"; sourceTree = "<group>"; };
 		B90072E0152F4BA4BA8DC9DE /* libAirMaps.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libAirMaps.a; sourceTree = "<group>"; };
-		E18B0672B22647A488A77A7E /* libRCTFBSDK.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTFBSDK.a; sourceTree = "<group>"; };
+		DBD8E5A41D90223B00586B33 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
+		DBD8E5A61D9037DA00586B33 /* Crowd.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Crowd.entitlements; path = Crowd/Crowd.entitlements; sourceTree = "<group>"; };
 		EA998E67579E463FA5974A03 /* AirMaps.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = AirMaps.xcodeproj; path = "../node_modules/react-native-maps/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -180,6 +182,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DBD8E5A31D901CA200586B33 /* libRCTFBSDK.a in Frameworks */,
 				87B711051D88597500BCDA0B /* libReactNativeControllers.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				87B710E61D8854F200BCDA0B /* FBSDKCoreKit.framework in Frameworks */,
@@ -191,11 +194,11 @@
 				87B710E71D8854F200BCDA0B /* FBSDKLoginKit.framework in Frameworks */,
 				139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */,
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
+				DBD8E5A51D90223B00586B33 /* Bolts.framework in Frameworks */,
 				87B710E81D8854F200BCDA0B /* FBSDKShareKit.framework in Frameworks */,
 				876AC6111D904DDB00DF2242 /* Bolts.framework in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
-				0E4D81C4FAF143F6BC0363FB /* libRCTFBSDK.a in Frameworks */,
 				70E33CBB4F294B00A47DCA5C /* libAirMaps.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -280,6 +283,7 @@
 			isa = PBXGroup;
 			children = (
 				876AC61F1D904EC500DF2242 /* Crowd.entitlements */,
+
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -369,6 +373,7 @@
 			isa = PBXGroup;
 			children = (
 				876AC6101D904DDB00DF2242 /* Bolts.framework */,
+
 				87B710E31D8854F200BCDA0B /* FBSDKCoreKit.framework */,
 				87B710E41D8854F200BCDA0B /* FBSDKLoginKit.framework */,
 				87B710E51D8854F200BCDA0B /* FBSDKShareKit.framework */,
@@ -445,7 +450,9 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+
 						DevelopmentTeam = 77FDP29TA7;
+
 						SystemCapabilities = {
 							com.apple.Keychain = {
 								enabled = 1;
@@ -745,7 +752,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Crowd/Crowd.entitlements;
 				DEAD_CODE_STRIPPING = NO;
+
 				DEVELOPMENT_TEAM = 77FDP29TA7;
+
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -755,9 +764,9 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
-					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
 					"$(SRCROOT)/../node_modules/react-native-controllers/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-maps/ios/AirMaps/**",
+					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
 				);
 				INFOPLIST_FILE = Crowd/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -769,6 +778,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Crowd;
 				PRODUCT_NAME = Crowd;
+				SDKROOT = iphoneos;
+				"SDKROOT[arch=*]" = iphoneos;
 			};
 			name = Debug;
 		};
@@ -777,7 +788,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Crowd/Crowd.entitlements;
+
 				DEVELOPMENT_TEAM = 77FDP29TA7;
+
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -787,9 +800,9 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
-					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
 					"$(SRCROOT)/../node_modules/react-native-controllers/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-maps/ios/AirMaps/**",
+					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
 				);
 				INFOPLIST_FILE = Crowd/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -801,6 +814,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Crowd;
 				PRODUCT_NAME = Crowd;
+				SDKROOT = iphoneos;
 			};
 			name = Release;
 		};
