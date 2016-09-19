@@ -2,8 +2,6 @@
 
 import React, { Component } from 'react';
 import * as Animatable from 'react-native-animatable';
-import EStyleSheet from 'react-native-extended-stylesheet';
-import theme from '../theme';
 
 import {
 	StyleSheet,
@@ -16,6 +14,10 @@ import {
   	Dimensions,
   	StatusBar
 } from 'react-native';
+
+import EStyleSheet from 'react-native-extended-stylesheet';
+import theme from '../theme';
+
 
 const FBSDK = require('react-native-fbsdk');
 
@@ -30,10 +32,10 @@ const {
 
 import MapView from 'react-native-maps';
 
-var Modal   = require('react-native-modalbox');
+import Modal from 'react-native-modalbox';
 import Button from 'react-native-button';
 
-var t = require('tcomb-form-native');
+import t from 'tcomb-form-native';
 var Form = t.form.Form;
 
 var LoginPage = require('./LoginPage');
@@ -105,7 +107,7 @@ class MapPage extends Component {
       				longitudeDelta: 0.0421,
 	        		}
 	        	});
-		        	
+			        	
 				this._onMapLoad(this.state.center);
 			},
 
@@ -619,9 +621,9 @@ class MapPage extends Component {
 				          	region={this.state.region}
 				          	showsUserLocation={true}
 				          	followsUserLocation={true}
-			  	>
+			  		>
 
-				  	{this.state.markers.map(marker => (
+				  		{this.state.markers.map(marker => (
 						<MapView.Marker
 						    	style={styles.marker}
 						    	key={marker.key}
@@ -637,17 +639,17 @@ class MapPage extends Component {
 						            }}
 						>
 							<View style={styles.container}>
-							        	<View style={styles.marker}>
-								        	<Image 
+					        	<View style={styles.marker}>
+						        	<Image 
 										source={require('../map-marker.png')}
 										style={styles.event_marker}
 									/>
-								          	<Image 
+						          	<Image 
 										source={{uri: marker.icon}}
 										style={styles.event_icon}
 									/>
-								        </View>
-						     	</View>
+						        </View>
+					     	</View>
 						</MapView.Marker>
 				  	))}
 
