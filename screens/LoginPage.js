@@ -8,7 +8,6 @@ import {
 	View,
 	Image,
 	AsyncStorage,
-	TouchableHighlight,
 	AlertIOS,
 } from 'react-native';
 
@@ -117,15 +116,12 @@ class LoginPage extends Component {
 		    },
 			titleImage: require('./../logo.png'),
 		    navigatorButtons: {
-	    		rightButtons: [{
-			        title: 'Inbox', 
-			        id: 'inbox', 
-		      	}],
 		      	leftButtons: [{
 		      		title: 'Settings', 
 			        id: 'settings', 
 		      	}]
 		    },
+	      	statusBarTextColorScheme: 'light'
 		});
 	};
 

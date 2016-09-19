@@ -4,17 +4,13 @@ import React, { Component } from 'react';
 import * as Animatable from 'react-native-animatable';
 
 import {
-	AppRegistry,
 	StyleSheet,
 	AsyncStorage,
 	Text,
 	View,
-	TouchableHighlight,
-	AlertIOS,
   	TextInput,
   	TouchableOpacity,
   	Image,
-  	ScrollView,
   	Dimensions,
   	StatusBar
 } from 'react-native';
@@ -28,7 +24,6 @@ const {
 	LoginManager,
 	AccessToken,
 	AppInviteDialog,
-	ShareDialog,
 } = FBSDK;
 
 const window = Dimensions.get('window');
@@ -96,17 +91,17 @@ class MapPage extends Component {
 		navigator.geolocation.getCurrentPosition(
 			(position) => {     	
 
-		        	this.setState({
-		        		center: {
-		          			latitude: position.coords.latitude,
-		          			longitude: position.coords.longitude
-		        		},
-		        		region: {
-					      	latitude: position.coords.latitude,
-		          			longitude: position.coords.longitude,
-		          			latitudeDelta: 0.09,
-		      				longitudeDelta: 0.0421,
-		        		}
+	        	this.setState({
+	        		center: {
+	          			latitude: position.coords.latitude,
+	          			longitude: position.coords.longitude
+	        		},
+	        		region: {
+				      	latitude: position.coords.latitude,
+	          			longitude: position.coords.longitude,
+	          			latitudeDelta: 0.09,
+	      				longitudeDelta: 0.0421,
+	        		}
 				});
 				this._onMapLoad(this.state.center);
 			},
@@ -157,18 +152,7 @@ class MapPage extends Component {
 
   	onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
 	    if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
-	      	if (event.id == 'inbox') { // this is the same id field from the static navigatorButtons definition
-		        this.props.navigator.push({
-					screen: 'Crowd.Messenger', // unique ID registered with Navigation.registerScreentitle: undefined, // navigation bar title of the pushed screen (optional)
-					titleImage: require('./../logo.png'), //navigation bar title image instead of the title text of the pushed screen (optional)
-					passProps: {}, // simple serializable object that will pass as props to the pushed screen (optional)
-					animated: true, // does the push have transition animation or does it happen immediately (optional)backButtonTitle: Back, // override the back button title (optional)
-					backButtonHidden: false, // hide the back button altogether (optional)
-					navigatorStyle: {}, // override the navigator style for the pushed screen (optional)
-					navigatorButtons: {} // override the nav buttons for the pushed screen (optional)
-				});
-      		}
-	      	else if (event.id == 'settings') { // this is the same id field from the static navigatorButtons definition
+	      	if (event.id == 'settings') { // this is the same id field from the static navigatorButtons definition
 				this.openSettings()
 			}
       	}
@@ -591,6 +575,25 @@ class MapPage extends Component {
 	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
+	   Open Messenger
+	------------------------------------------------------------------------------------------------------------------------------------------------------ */
+	openMessenger(event_id) {
+
+		this.props.navigator.push({
+			screen: "Crowd.Messenger",
+		    navigatorStyle: {
+		    	navBarTextColor: '#fff',
+			  	navBarBackgroundColor: '#074E64',
+			  	navBarButtonColor: '#fff',
+		      	statusBarTextColorScheme: 'light'
+		    },
+		    passProps: {event_id: event_id},
+			titleImage: require('./../logo.png'),
+	      	statusBarTextColorScheme: 'light'
+		});
+	}
+
+	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
 	   Render
 	------------------------------------------------------------------------------------------------------------------------------------------------------ */
   	render() {
@@ -614,7 +617,7 @@ class MapPage extends Component {
 				              latitude: marker.latitude,
 				              longitude: marker.longitude
 				            }}
-				            onSelect={() => this.fetchInfo(marker)}
+				            onPress={() => this.fetchInfo(marker)}
 				            flat= {true}
 				            centerOffset= {{
 				            	x: 11,
@@ -653,6 +656,10 @@ class MapPage extends Component {
 						source={{uri: "this.state.event_creator_picture"}}
 						style={styles.event_guest_icon}
 					/>
+
+					<Text style={styles.event_creator_name} onPress={() => this.openMessenger(this.state.event_id)}>
+						Messenger
+					</Text>
 
 					<Text style={styles.event_creator_name}>
 						{this.state.event_creator_name}
