@@ -40,5 +40,4 @@ buck-out/
 android/app/libs
 android/keystores/debug.keystore
 
-
 ios/Crowd.xcodeproj/project.pbxproj

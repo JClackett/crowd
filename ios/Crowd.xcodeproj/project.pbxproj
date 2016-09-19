@@ -24,6 +24,7 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		70E33CBB4F294B00A47DCA5C /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B90072E0152F4BA4BA8DC9DE /* libAirMaps.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		876AC6111D904DDB00DF2242 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876AC6101D904DDB00DF2242 /* Bolts.framework */; };
 		87B710E61D8854F200BCDA0B /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87B710E31D8854F200BCDA0B /* FBSDKCoreKit.framework */; };
 		87B710E71D8854F200BCDA0B /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87B710E41D8854F200BCDA0B /* FBSDKLoginKit.framework */; };
 		87B710E81D8854F200BCDA0B /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87B710E51D8854F200BCDA0B /* FBSDKShareKit.framework */; };
@@ -156,6 +157,8 @@
 		6E8CEC78CE7742CFA9A26607 /* RCTFBSDK.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTFBSDK.xcodeproj; path = "../node_modules/react-native-fbsdk/ios/RCTFBSDK.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		876AC6101D904DDB00DF2242 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
+		876AC61F1D904EC500DF2242 /* Crowd.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Crowd.entitlements; path = Crowd/Crowd.entitlements; sourceTree = "<group>"; };
 		87B710E31D8854F200BCDA0B /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		87B710E41D8854F200BCDA0B /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		87B710E51D8854F200BCDA0B /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
@@ -193,6 +196,7 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				DBD8E5A51D90223B00586B33 /* Bolts.framework in Frameworks */,
 				87B710E81D8854F200BCDA0B /* FBSDKShareKit.framework in Frameworks */,
+				876AC6111D904DDB00DF2242 /* Bolts.framework in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				70E33CBB4F294B00A47DCA5C /* libAirMaps.a in Frameworks */,
@@ -278,7 +282,8 @@
 		13B07FAE1A68108700A75B9A /* Crowd */ = {
 			isa = PBXGroup;
 			children = (
-				DBD8E5A61D9037DA00586B33 /* Crowd.entitlements */,
+				876AC61F1D904EC500DF2242 /* Crowd.entitlements */,
+
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -367,7 +372,8 @@
 		87B710E21D8854AE00BCDA0B /* Framework */ = {
 			isa = PBXGroup;
 			children = (
-				DBD8E5A41D90223B00586B33 /* Bolts.framework */,
+				876AC6101D904DDB00DF2242 /* Bolts.framework */,
+
 				87B710E31D8854F200BCDA0B /* FBSDKCoreKit.framework */,
 				87B710E41D8854F200BCDA0B /* FBSDKLoginKit.framework */,
 				87B710E51D8854F200BCDA0B /* FBSDKShareKit.framework */,
@@ -444,7 +450,9 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 4MH4G7UVNJ;
+
+						DevelopmentTeam = 77FDP29TA7;
+
 						SystemCapabilities = {
 							com.apple.Keychain = {
 								enabled = 1;
@@ -744,7 +752,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Crowd/Crowd.entitlements;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 4MH4G7UVNJ;
+
+				DEVELOPMENT_TEAM = 77FDP29TA7;
+
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -778,7 +788,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Crowd/Crowd.entitlements;
-				DEVELOPMENT_TEAM = 4MH4G7UVNJ;
+
+				DEVELOPMENT_TEAM = 77FDP29TA7;
+
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

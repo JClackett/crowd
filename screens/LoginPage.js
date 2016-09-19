@@ -8,7 +8,6 @@ import {
 	View,
 	Image,
 	AsyncStorage,
-	TouchableHighlight,
 	AlertIOS,
 } from 'react-native';
 
