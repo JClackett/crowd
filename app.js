@@ -5,11 +5,13 @@ import {
   AsyncStorage
 } from 'react-native';
 
+import {Navigation} from 'react-native-navigation';
+
+
 // screen related book keeping
 import {registerScreens} from './screens';
 registerScreens();
 
-import {Navigation} from 'react-native-navigation';
 
 const FBSDK = require('react-native-fbsdk');
 

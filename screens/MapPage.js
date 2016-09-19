@@ -68,24 +68,23 @@ class MapPage extends Component {
 	    	this.state = {
 		      	initialPosition: 'unknown',
 		    	lastPosition: 'unknown',
-			center: {
-				latitude: 0,
-				longitude: 0
-			},
-			zoom: 14,
-			animated: true,
-	  		isOpen: false,
-			swipeToClose: true,
-			sliderValue: 0.3,
-	  		name: 'initial',
-	  		region: {
-			      	latitude: 0,
-			      	longitude: 0,
-			      	latitudeDelta: 0.0922,
-			      	longitudeDelta: 0.0421,
-			},
-			markers: [],
-			name: 'initial',
+				center: {
+					latitude: 0,
+					longitude: 0
+				},
+				zoom: 14,
+				animated: true,
+		  		isOpen: false,
+				swipeToClose: true,
+				sliderValue: 0.3,
+		  		name: 'initial',
+		  		region: {
+				      	latitude: 0,
+				      	longitude: 0,
+				      	latitudeDelta: 0.0922,
+				      	longitudeDelta: 0.0421,
+				},
+				markers: [],
 	      		event_guests_pictures: [""]
     		};
 
@@ -624,41 +623,40 @@ class MapPage extends Component {
 			  		>
 
 				  		{this.state.markers.map(marker => (
-						<MapView.Marker
-						    	style={styles.marker}
-						    	key={marker.key}
-						      	coordinate={{
-						              	latitude: marker.latitude,
-						              	longitude: marker.longitude
-						            }}
-						            onSelect={() => this.fetchInfo(marker)}
-						            flat= {true}
-						            centerOffset= {{
-						            	x: 11,
-						              	y: -22
-						            }}
-						>
-							<View style={styles.container}>
-					        	<View style={styles.marker}>
-						        	<Image 
-										source={require('../map-marker.png')}
-										style={styles.event_marker}
-									/>
-						          	<Image 
-										source={{uri: marker.icon}}
-										style={styles.event_icon}
-									/>
-						        </View>
-					     	</View>
-						</MapView.Marker>
-				  	))}
+							<MapView.Marker
+							    	style={styles.marker}
+							    	key={marker.key}
+							      	coordinate={{
+							              	latitude: marker.latitude,
+							              	longitude: marker.longitude
+							            }}
+							            onSelect={() => this.fetchInfo(marker)}
+							            flat= {true}
+							            centerOffset= {{
+							            	x: 11,
+							              	y: -22
+							            }}
+							>
+								<View style={styles.container}>
+						        	<View style={styles.marker}>
+							        	<Image 
+											source={require('../map-marker.png')}
+											style={styles.event_marker}
+										/>
+							          	<Image 
+											source={{uri: marker.icon}}
+											style={styles.event_icon}
+										/>
+							        </View>
+						     	</View>
+							</MapView.Marker>
+					  	))}
 
 				</MapView>
 				{/* ------------------------------------------------------------------------------------------------------------------------------------------------------
 				   Event Modal
 				------------------------------------------------------------------------------------------------------------------------------------------------------ */}
-
-				<Modal style={styles.events_modal} ref={"event_modal"} backdropOpacity={0.3} animationDuration={300} swipeToClose={this.state.swipeToClose} onClosed={this.onEventClosed} onOpened={this.onEventOpened} onClosingState={this.onEventClosingState}>
+				<Modal style={styles.events_modal} ref={"event_modal"} backdropOpacity={0.3} animationDuration={300} swipeToClose={this.state.swipeToClose} onClosed={this.onEventClosed.bind(this)} onOpened={this.onEventOpened} onClosingState={this.onEventClosingState}>
 
 					{
 						this.state.event_guests_pictures.map(function(picture, index){
@@ -792,7 +790,7 @@ class MapPage extends Component {
    Styles
 ------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-var styles = EStyleSheet.create({
+const styles = EStyleSheet.create({
 
 	container: {
 		position: 'absolute',
@@ -1016,3 +1014,5 @@ var styles = EStyleSheet.create({
 		width:200,
 	},
 });
+
+module.exports = MapPage;
