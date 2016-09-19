@@ -5,7 +5,9 @@ import {
   AsyncStorage
 } from 'react-native';
 
-AppRegistry.registerComponent('Crowd', () => Crowd);
+// screen related book keeping
+import {registerScreens} from './screens';
+registerScreens();
 
 import {Navigation} from 'react-native-navigation';
 
@@ -15,9 +17,6 @@ const {
   AccessToken,
 } = FBSDK;
 
-// screen related book keeping
-import {registerScreens} from './screens';
-registerScreens();
 
 AccessToken.getCurrentAccessToken().then((response) => {
 	if (response != null) {
@@ -52,4 +51,5 @@ AccessToken.getCurrentAccessToken().then((response) => {
 		});
 	}
 }).done();
+
 

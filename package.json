@@ -11,6 +11,7 @@
     "react-native-animatable": "^0.6.1",
     "react-native-button": "^1.7.0",
     "react-native-cli": "^1.0.0",
+    "react-native-extended-stylesheet": "^0.3.0",
     "react-native-fbsdk": "^0.3.0",
     "react-native-gifted-chat": "0.0.10",
     "react-native-gifted-listview": "0.0.15",
