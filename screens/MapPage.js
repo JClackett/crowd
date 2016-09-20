@@ -83,8 +83,8 @@ class MapPage extends Component {
 	  		region: {
 			      	latitude: 0,
 			      	longitude: 0,
-			      	latitudeDelta: 0.0922,
-			      	longitudeDelta: 0.0421,
+			      	latitudeDelta: 0,
+			      	longitudeDelta: 0,
 			},
 			markers: [],
       			event_guests_pictures: [""]
@@ -103,8 +103,8 @@ class MapPage extends Component {
 			        		region: {
 					      	latitude: position.coords.latitude,
 			          			longitude: position.coords.longitude,
-			          			latitudeDelta: 0.09,
-		      				longitudeDelta: 0.0421,
+			          			latitudeDelta: 0.5,
+		      				longitudeDelta: 0.1,
 			        		},
 			        	});
 
@@ -176,10 +176,6 @@ class MapPage extends Component {
 			}
       		}
     	}
-
- 	//  onRegionChange(region) {
-	//   	this.setState({ region });
-	// }
 
   	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
   	   Modal
@@ -632,10 +628,9 @@ class MapPage extends Component {
 
 		    		<MapView
 		    			style={styles.map}
-				          	region={this.state.region}
 				          	showsUserLocation={true}
 				          	followsUserLocation={true}
-			  		>
+			  	>
 
 				  		{this.state.markers.map(marker => (
 							<MapView.Marker
@@ -653,17 +648,17 @@ class MapPage extends Component {
 							            }}
 							>
 								<View style={styles.container}>
-						        	<View style={styles.marker}>
-							        	<Image 
+								        	<View style={styles.marker}>
+									        	<Image 
 											source={require('../map-marker.png')}
 											style={styles.event_marker}
 										/>
-							          	<Image 
+									          	<Image 
 											source={{uri: marker.icon}}
 											style={styles.event_icon}
 										/>
-							        </View>
-						     	</View>
+									</View>
+								</View>
 							</MapView.Marker>
 					  	))}
 
@@ -695,16 +690,21 @@ class MapPage extends Component {
 						style={styles.event_creator}
 					/>
 
+					<TouchableOpacity onPress={() => this.openMessenger(this.state.event_id)} style={{top: 0, right: 0,position: "absolute"}} >
+					
+						<Image 
+							source={require('../message-icon.png')}
+							style={styles.message_icon} 
+						/>
+					
+					</TouchableOpacity>
+					
+
 					<Text style={styles.event_creator_name}>
 						{this.state.event_creator_name}
 					</Text>
 
-					<Text style={styles.event_creator_name} onPress={() => this.openMessenger(this.state.event_id)}>
-						Messenger
-					</Text>
-
-			
-
+		
 					<Text style={styles.event_title}>
 						{this.state.event_title}
 					</Text>
@@ -983,6 +983,13 @@ const styles = EStyleSheet.create({
   		textAlign: "center",
   	},
 
+  	message_icon: {
+  		height: 40,
+  		width: 41,
+  		marginTop:10,
+  		marginRight:10,
+  	},
+
   	event_title: {
   		color: "#FFF",
   		fontSize:20,
@@ -1003,6 +1010,7 @@ const styles = EStyleSheet.create({
   		height: 40,
   		borderColor: "white",
   		width: 40,
+  		top:0,
   		marginTop: 10,
   		left: 30,
   		borderRadius: 20,
