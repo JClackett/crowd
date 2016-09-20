@@ -23,7 +23,7 @@ export default class Messenger extends React.Component {
 	    super(props);
 
 	    this.state = {
-	    	messages: [],
+	      	messages: [],
 	    	event_id: this.props.event_id,
     	};
 
@@ -32,6 +32,10 @@ export default class Messenger extends React.Component {
 
   	componentDidMount() {
 	  	this._loadInitialState().done();
+  	}
+
+  	componentWillMount() {
+	    this.onMessengerLoad(this.props.event_id);
   	}
 
 
@@ -49,9 +53,6 @@ export default class Messenger extends React.Component {
 		this.setState({facebook_picture: profile_picture});
 		this.setState({user_name: user_name});
 		this.setState({user_id: user_id});
-
-	    this.onMessengerLoad(this.props.event_id);
-
 	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -60,6 +61,7 @@ export default class Messenger extends React.Component {
   	
 
   	onMessengerLoad(event_id) {
+  		console.log(this.props);
 	  	var query = this._urlForMessageQuery(event_id);
 	  	this.getMessages(query);
 	}
@@ -121,14 +123,16 @@ export default class Messenger extends React.Component {
 			arr[i]._id = arr[i].id;
 		    arr[i].text = arr[i].content;
 		    arr[i].user = arr[i].creator;
+		    arr[i].createdAt = arr[i].created_at;
 
-		    var user_arr = arr[i].user;
+		    arr[i].user._id = arr[i].user.id;
+		    arr[i].user.avatar = arr[i].user.facebook_picture;
 
-		    user_arr._id = user_arr.id;
-		    user_arr.avatar = user_arr.facebook_picture;
+		    arr[i].position = 'right';
 
-			delete user_arr.id;
-		    delete user_arr.facebook_picture;
+			delete arr[i].user.id;
+			delete arr[i].user.created_at;
+		    delete arr[i].user.facebook_picture;
 		    delete arr[i].id;
 		    delete arr[i].content;
 		    delete arr[i].creator;
@@ -136,7 +140,7 @@ export default class Messenger extends React.Component {
 
 		this.setState((previousState) => {
 	      	return {
-		        messages: GiftedChat.append(previousState.messages, messages),
+		        messages: GiftedChat.append(previousState.messages, arr),
 	      	};
     	});
 	}
@@ -154,6 +158,7 @@ export default class Messenger extends React.Component {
     	});
 
 		this._createMessage(messages)
+
 	}
 
 	_createMessage(data) {
@@ -200,7 +205,6 @@ export default class Messenger extends React.Component {
 	          name: this.state.user_name,
 	          avatar: this.state.profile_picture
 	        }}
-
 	      />
 	    );
   	}

@@ -95,18 +95,18 @@ class MapPage extends Component {
   	componentDidMount() {
 		navigator.geolocation.getCurrentPosition(
 			(position) => {     	
-		        		this.setState({
-			        		center: {
-			          			latitude: position.coords.latitude,
-			          			longitude: position.coords.longitude
-			        		},
-			        		region: {
-					      	latitude: position.coords.latitude,
-			          			longitude: position.coords.longitude,
-			          			latitudeDelta: 0.5,
-		      				longitudeDelta: 0.1,
-			        		},
-			        	});
+        		this.setState({
+	        		center: {
+	          			latitude: position.coords.latitude,
+	          			longitude: position.coords.longitude
+	        		},
+	        		region: {
+			      	latitude: position.coords.latitude,
+	          			longitude: position.coords.longitude,
+	          			latitudeDelta: 0.5,
+      				longitudeDelta: 0.1,
+	        		},
+	        	});
 
 				this._onMapLoad(this.state.center);
 			},
@@ -630,31 +630,31 @@ class MapPage extends Component {
 		    			style={styles.map}
 				          	showsUserLocation={true}
 				          	followsUserLocation={true}
-			  	>
+			  		>
 
 				  		{this.state.markers.map(marker => (
 							<MapView.Marker
-							    	style={styles.marker}
-							    	key={marker.key}
-							      	coordinate={{
-							              	latitude: marker.latitude,
-							              	longitude: marker.longitude
-							            }}
-							            onSelect={() => this.fetchInfo(marker)}
-							            flat= {true}
-							            centerOffset= {{
-							            	x: 11,
-							              	y: -22
-							            }}
+						    	style={styles.marker}
+						    	key={marker.key}
+						      	coordinate={{
+					              	latitude: marker.latitude,
+					              	longitude: marker.longitude
+					            }}
+					            onSelect={() => this.fetchInfo(marker)}
+					            flat= {true}
+					            centerOffset= {{
+					            	x: 11,
+					              	y: -22
+					            }}
 							>
 
 								<View style={styles.container}>
-								        	<View style={styles.marker}>
-									        	<Image 
+						        	<View style={styles.marker}>
+							        	<Image 
 											source={require('../map-marker.png')}
 											style={styles.event_marker}
 										/>
-									          	<Image 
+							          	<Image 
 											source={{uri: marker.icon}}
 											style={styles.event_icon}
 										/>
@@ -672,12 +672,12 @@ class MapPage extends Component {
 					{
 						this.state.event_guests_pictures.map(function(picture, index){
 							return (
-									<Image 
-										key={index}
-										source={{uri: picture}}
-										style={EStyleSheet.child(styles, 'event_guest', index, this.state.event_guests_pictures.length)}
-									/>
-								)
+								<Image 
+									key={index}
+									source={{uri: picture}}
+									style={EStyleSheet.child(styles, 'event_guest', index, this.state.event_guests_pictures.length)}
+								/>
+							)
 
 						}.bind(this))
 					}
