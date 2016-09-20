@@ -1012,13 +1012,13 @@ const styles = EStyleSheet.create({
   		width: 40,
   		top:0,
   		marginTop: 10,
-  		left: 30,
+  		left: 50,
   		borderRadius: 20,
   		borderWidth: 2,
   		borderColor: "#FFF"
 	},
 	'event_guest:last-child': {
-		left:50,
+		left:30,
 	},
 	'event_guest:first-child': {
 		left:10,
