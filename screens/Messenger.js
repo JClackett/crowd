@@ -123,12 +123,6 @@ export default class Messenger extends React.Component {
 			arr[i].user = arr[i].creator;
 		    	arr[i].createdAt = arr[i].created_at;
 
-			if (arr[i].creator.id == this.state.user_id )
-				arr[i].position = 'right';
-			else {
-				arr[i].position = 'left';
-			}
-
 			var user_arr = arr[i].user;
 			user_arr._id = user_arr.id;
 			user_arr.avatar = user_arr.facebook_picture;
@@ -199,16 +193,19 @@ export default class Messenger extends React.Component {
   	------------------------------------------------------------------------------------------------------------------------------------------------------ */
   	
 	render() {
+
+		var user_id = parseInt(this.state.user_id);
+
 		return (
 			<GiftedChat
 				messages={this.state.messages}
 				onSend={this.onSend}
 				user={{
-					_id: this.state.user_id,
+					_id: user_id,
 					name: this.state.user_name,
-					avatar: this.state.profile_picture
 				}}
 			/>
 		);
 	}
+
 }
