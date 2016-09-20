@@ -2,8 +2,6 @@
 
 import React, { Component } from 'react';
 import * as Animatable from 'react-native-animatable';
-import EStyleSheet from 'react-native-extended-stylesheet';
-import theme from '../theme';
 
 import {
 	StyleSheet,
@@ -17,7 +15,12 @@ import {
   	StatusBar
 } from 'react-native';
 
-import FBSDK from 'react-native-fbsdk';
+
+import EStyleSheet from 'react-native-extended-stylesheet';
+import theme from '../theme';
+
+
+const FBSDK = require('react-native-fbsdk');
 
 const {
 	LoginButton,
@@ -84,7 +87,7 @@ class MapPage extends Component {
 			      	longitudeDelta: 0.0421,
 			},
 			markers: [],
-	      		event_guests_pictures: [],
+      			event_guests_pictures: [""]
     		};
 
   	}	
@@ -92,7 +95,6 @@ class MapPage extends Component {
   	componentDidMount() {
 		navigator.geolocation.getCurrentPosition(
 			(position) => {     	
-
 		        		this.setState({
 			        		center: {
 			          			latitude: position.coords.latitude,
@@ -109,7 +111,7 @@ class MapPage extends Component {
 				this._onMapLoad(this.state.center);
 			},
 
-	      		(error) => alert(error.message),
+  			(error) => alert(error.message),
 	      		{enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
 		);
 
@@ -633,44 +635,43 @@ class MapPage extends Component {
 				          	region={this.state.region}
 				          	showsUserLocation={true}
 				          	followsUserLocation={true}
-			  	>
+			  		>
 
-				  	{this.state.markers.map(marker => (
-						<MapView.Marker
-						    	style={styles.marker}
-						    	key={marker.key}
-						      	coordinate={{
-						              	latitude: marker.latitude,
-						              	longitude: marker.longitude
-						            }}
-						            onSelect={() => this.fetchInfo(marker)}
-						            flat= {true}
-						            centerOffset= {{
-						            	x: 11,
-						              	y: -22
-						            }}
-						>
-							<View style={styles.container}>
-							        	<View style={styles.marker}>
-								        	<Image 
-										source={require('../map-marker.png')}
-										style={styles.event_marker}
-									/>
-								          	<Image 
-										source={{uri: marker.icon}}
-										style={styles.event_icon}
-									/>
-								        </View>
+				  		{this.state.markers.map(marker => (
+							<MapView.Marker
+							    	style={styles.marker}
+							    	key={marker.key}
+							      	coordinate={{
+							              	latitude: marker.latitude,
+							              	longitude: marker.longitude
+							            }}
+							            onSelect={() => this.fetchInfo(marker)}
+							            flat= {true}
+							            centerOffset= {{
+							            	x: 11,
+							              	y: -22
+							            }}
+							>
+								<View style={styles.container}>
+						        	<View style={styles.marker}>
+							        	<Image 
+											source={require('../map-marker.png')}
+											style={styles.event_marker}
+										/>
+							          	<Image 
+											source={{uri: marker.icon}}
+											style={styles.event_icon}
+										/>
+							        </View>
 						     	</View>
-						</MapView.Marker>
-				  	))}
+							</MapView.Marker>
+					  	))}
 
 				</MapView>
 				{/* ------------------------------------------------------------------------------------------------------------------------------------------------------
 				   Event Modal
 				------------------------------------------------------------------------------------------------------------------------------------------------------ */}
-
-				<Modal style={styles.events_modal} ref={"event_modal"} backdropOpacity={0.3} animationDuration={300} swipeToClose={this.state.swipeToClose} onClosed={this.onEventClosed} onOpened={this.onEventOpened} onClosingState={this.onEventClosingState}>
+				<Modal style={styles.events_modal} ref={"event_modal"} backdropOpacity={0.3} animationDuration={300} swipeToClose={this.state.swipeToClose} onClosed={this.onEventClosed.bind(this)} onOpened={this.onEventOpened} onClosingState={this.onEventClosingState}>
 
 					{
 						this.state.event_guests_pictures.map(function(picture, index){

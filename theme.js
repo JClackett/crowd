@@ -7,7 +7,6 @@ const window = Dimensions.get('window');
 var margin = (window.width)*0.1
 var theWidth = (window.width)-margin*2
 
-
 export default {
 	theWidth: theWidth,
 	margin: margin,
