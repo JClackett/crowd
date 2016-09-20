@@ -17,7 +17,7 @@ import {
   	StatusBar
 } from 'react-native';
 
-const FBSDK = require('react-native-fbsdk');
+import FBSDK from 'react-native-fbsdk';
 
 const {
 	LoginButton,
@@ -30,13 +30,13 @@ const {
 
 import MapView from 'react-native-maps';
 
-var Modal   = require('react-native-modalbox');
+import Modal from 'react-native-modalbox';
 import Button from 'react-native-button';
 
-var t = require('tcomb-form-native');
+import t from 'tcomb-form-native';
 var Form = t.form.Form;
 
-var LoginPage = require('./LoginPage');
+import LoginPage from './LoginPage';
 var loginButton;
 
 // Set up the styling using theme.js
@@ -48,6 +48,7 @@ var Event = t.struct({
 	howLongWillItLast: t.Number,    
 });
 
+var formOptions = {};
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------
    Main Page
@@ -83,8 +84,7 @@ class MapPage extends Component {
 			      	longitudeDelta: 0.0421,
 			},
 			markers: [],
-			name: 'initial',
-	      		event_guests_pictures: [""]
+	      		event_guests_pictures: [],
     		};
 
   	}	
@@ -105,7 +105,7 @@ class MapPage extends Component {
 		      				longitudeDelta: 0.0421,
 			        		},
 			        	});
-			        	
+
 				this._onMapLoad(this.state.center);
 			},
 
@@ -113,10 +113,24 @@ class MapPage extends Component {
 	      		{enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
 		);
 
-		this.watchID = navigator.geolocation.watchPosition((position) => {});
+		this.watchID = navigator.geolocation.watchPosition((position) => {
+			this.setState({
+		        		center: {
+		          			latitude: position.coords.latitude,
+		          			longitude: position.coords.longitude
+		        		},
+		        		region: {
+				      	latitude: position.coords.latitude,
+		          			longitude: position.coords.longitude,
+		          			latitudeDelta: 0.09,
+	      				longitudeDelta: 0.0421,
+		        		},
+		        	});
+
+		});
 
 	  	this._loadInitialState().done();
-
+		
 	  	// this.refs.join_button.fadeOut(1);
 
 	}
@@ -154,14 +168,14 @@ class MapPage extends Component {
 	}
 
   	onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
-	    if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
-	      	if (event.id == 'settings') { // this is the same id field from the static navigatorButtons definition
+	   	if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
+	      		if (event.id == 'settings') { // this is the same id field from the static navigatorButtons definition
 				this.openSettings()
 			}
-      	}
-    }
+      		}
+    	}
 
- //  	onRegionChange(region) {
+ 	//  onRegionChange(region) {
 	//   	this.setState({ region });
 	// }
 
@@ -456,7 +470,7 @@ class MapPage extends Component {
 	------------------------------------------------------------------------------------------------------------------------------------------------------ */
 	joinEvent() {
 		AsyncStorage.getItem("access_token").then((value) => {
-			fetch("http://localhost:3000/g_getEventInfouests", {
+			fetch("http://localhost:3000/guests", {
 				method: "POST",
 				headers: {
 					'Accept': 'application/json',
@@ -790,7 +804,7 @@ class MapPage extends Component {
    Styles
 ------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-var styles = EStyleSheet.create({
+const styles = EStyleSheet.create({
 
 	container: {
 		position: 'absolute',
@@ -1014,3 +1028,5 @@ var styles = EStyleSheet.create({
 		width:200,
 	},
 });
+
+module.exports = MapPage;
