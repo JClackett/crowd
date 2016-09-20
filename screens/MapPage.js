@@ -15,6 +15,7 @@ import {
   	StatusBar
 } from 'react-native';
 
+
 import EStyleSheet from 'react-native-extended-stylesheet';
 import theme from '../theme';
 
@@ -38,7 +39,7 @@ import Button from 'react-native-button';
 import t from 'tcomb-form-native';
 var Form = t.form.Form;
 
-var LoginPage = require('./LoginPage');
+import LoginPage from './LoginPage';
 var loginButton;
 
 // Set up the styling using theme.js
@@ -50,6 +51,7 @@ var Event = t.struct({
 	howLongWillItLast: t.Number,    
 });
 
+var formOptions = {};
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------
    Main Page
@@ -68,24 +70,24 @@ class MapPage extends Component {
 	    	this.state = {
 		      	initialPosition: 'unknown',
 		    	lastPosition: 'unknown',
-				center: {
-					latitude: 0,
-					longitude: 0
-				},
-				zoom: 14,
-				animated: true,
-		  		isOpen: false,
-				swipeToClose: true,
-				sliderValue: 0.3,
-		  		name: 'initial',
-		  		region: {
+			center: {
+				latitude: 0,
+				longitude: 0
+			},
+			zoom: 14,
+			animated: true,
+	  		isOpen: false,
+			swipeToClose: true,
+			sliderValue: 0.3,
+	  		name: 'initial',
+	  		region: {
 			      	latitude: 0,
 			      	longitude: 0,
-			      	latitudeDelta: 0.0922,
-			      	longitudeDelta: 0.0421,
-				},
-				markers: [],
-	      		event_guests_pictures: [""]
+			      	latitudeDelta: 0,
+			      	longitudeDelta: 0,
+			},
+			markers: [],
+      			event_guests_pictures: [""]
     		};
 
   	}	
@@ -93,20 +95,19 @@ class MapPage extends Component {
   	componentDidMount() {
 		navigator.geolocation.getCurrentPosition(
 			(position) => {     	
+		        		this.setState({
+			        		center: {
+			          			latitude: position.coords.latitude,
+			          			longitude: position.coords.longitude
+			        		},
+			        		region: {
+					      	latitude: position.coords.latitude,
+			          			longitude: position.coords.longitude,
+			          			latitudeDelta: 0.5,
+		      				longitudeDelta: 0.1,
+			        		},
+			        	});
 
-	        	this.setState({
-	        		center: {
-	          			latitude: position.coords.latitude,
-	          			longitude: position.coords.longitude
-	        		},
-	        		region: {
-			      		latitude: position.coords.latitude,
-	          			longitude: position.coords.longitude,
-	          			latitudeDelta: 0.09,
-      					longitudeDelta: 0.0421,
-	        		}
-	        	});
-			        	
 				this._onMapLoad(this.state.center);
 			},
 
@@ -114,10 +115,24 @@ class MapPage extends Component {
 	      		{enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
 		);
 
-		this.watchID = navigator.geolocation.watchPosition((position) => {});
+		this.watchID = navigator.geolocation.watchPosition((position) => {
+			this.setState({
+		        		center: {
+		          			latitude: position.coords.latitude,
+		          			longitude: position.coords.longitude
+		        		},
+		        		region: {
+				      	latitude: position.coords.latitude,
+		          			longitude: position.coords.longitude,
+		          			latitudeDelta: 0.09,
+	      				longitudeDelta: 0.0421,
+		        		},
+		        	});
+
+		});
 
 	  	this._loadInitialState().done();
-
+		
 	  	// this.refs.join_button.fadeOut(1);
 
 	}
@@ -155,16 +170,12 @@ class MapPage extends Component {
 	}
 
   	onNavigatorEvent(event) { // this is the onPress handler for the two buttons together
-	    if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
-	      	if (event.id == 'settings') { // this is the same id field from the static navigatorButtons definition
+	   	if (event.type == 'NavBarButtonPress') { // this is the event type for button presses
+	      		if (event.id == 'settings') { // this is the same id field from the static navigatorButtons definition
 				this.openSettings()
 			}
-      	}
-    }
-
- //  	onRegionChange(region) {
-	//   	this.setState({ region });
-	// }
+      		}
+    	}
 
   	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
   	   Modal
@@ -457,7 +468,7 @@ class MapPage extends Component {
 	------------------------------------------------------------------------------------------------------------------------------------------------------ */
 	joinEvent() {
 		AsyncStorage.getItem("access_token").then((value) => {
-			fetch("http://localhost:3000/g_getEventInfouests", {
+			fetch("http://localhost:3000/guests", {
 				method: "POST",
 				headers: {
 					'Accept': 'application/json',
@@ -613,14 +624,13 @@ class MapPage extends Component {
 
 		return (
 
-    			<View style={styles.cuntainer}>
+    			<View style={styles.container}>
 
 		    		<MapView
 		    			style={styles.map}
-				          	region={this.state.region}
 				          	showsUserLocation={true}
 				          	followsUserLocation={true}
-			  		>
+			  	>
 
 				  		{this.state.markers.map(marker => (
 							<MapView.Marker
@@ -637,18 +647,19 @@ class MapPage extends Component {
 							              	y: -22
 							            }}
 							>
-								<View style={styles.cuntainer}>
-						        	<View style={styles.marker}>
-							        	<Image 
+
+								<View style={styles.container}>
+								        	<View style={styles.marker}>
+									        	<Image 
 											source={require('../map-marker.png')}
 											style={styles.event_marker}
 										/>
-							          	<Image 
+									          	<Image 
 											source={{uri: marker.icon}}
 											style={styles.event_icon}
 										/>
-							        </View>
-						     	</View>
+									</View>
+								</View>
 							</MapView.Marker>
 					  	))}
 
@@ -680,16 +691,21 @@ class MapPage extends Component {
 						style={styles.event_creator}
 					/>
 
+					<TouchableOpacity onPress={() => this.openMessenger(this.state.event_id)} style={{top: 0, right: 0,position: "absolute"}} >
+					
+						<Image 
+							source={require('../message-icon.png')}
+							style={styles.message_icon} 
+						/>
+					
+					</TouchableOpacity>
+					
+
 					<Text style={styles.event_creator_name}>
 						{this.state.event_creator_name}
 					</Text>
 
-					<Text style={styles.event_creator_name} onPress={() => this.openMessenger(this.state.event_id)}>
-						Messenger
-					</Text>
-
-			
-
+		
 					<Text style={styles.event_title}>
 						{this.state.event_title}
 					</Text>
@@ -792,7 +808,7 @@ class MapPage extends Component {
 
 const styles = EStyleSheet.create({
 
-	cuntainer: {
+	container: {
 		position: 'absolute',
 	    top: 0,
 	    left: 0,
@@ -968,6 +984,13 @@ const styles = EStyleSheet.create({
   		textAlign: "center",
   	},
 
+  	message_icon: {
+  		height: 40,
+  		width: 41,
+  		marginTop:10,
+  		marginRight:10,
+  	},
+
   	event_title: {
   		color: "#FFF",
   		fontSize:20,
@@ -988,6 +1011,7 @@ const styles = EStyleSheet.create({
   		height: 40,
   		borderColor: "white",
   		width: 40,
+  		top:0,
   		marginTop: 10,
   		left: 30,
   		borderRadius: 20,

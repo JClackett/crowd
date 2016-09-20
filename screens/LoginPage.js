@@ -11,7 +11,7 @@ import {
 	AlertIOS,
 } from 'react-native';
 
-const FBSDK = require('react-native-fbsdk');
+import FBSDK from 'react-native-fbsdk';
 
 const {
 	LoginButton,
