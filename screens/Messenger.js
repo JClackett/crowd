@@ -20,18 +20,21 @@ export default class Messenger extends React.Component {
   	
   	constructor(props) {
 
-	    super(props);
+		super(props);
 
-	    this.state = {
-	    	messages: [],
-	    	event_id: this.props.event_id,
-    	};
+		this.state = {
+			messages: [],
+		};
 
-	    this.onSend = this.onSend.bind(this);
+		this.onSend = this.onSend.bind(this);
 	}
 
   	componentDidMount() {
 	  	this._loadInitialState().done();
+  	}
+
+  	componentWillMount() {
+		this.onMessengerLoad(this.props.event_id);
   	}
 
 
@@ -49,9 +52,6 @@ export default class Messenger extends React.Component {
 		this.setState({facebook_picture: profile_picture});
 		this.setState({user_name: user_name});
 		this.setState({user_id: user_id});
-
-	   	this.onMessengerLoad(this.props.event_id);
-
 	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ export default class Messenger extends React.Component {
 
 	_urlForMessageQuery(event_id) {
 		var params = {
-	      	event_id: event_id,
+	      		event_id: event_id,
 	  	};
 	 
 		var querystring = Object.keys(params)
@@ -121,6 +121,7 @@ export default class Messenger extends React.Component {
 			arr[i]._id = arr[i].id;
 			arr[i].text = arr[i].content;
 			arr[i].user = arr[i].creator;
+		    	arr[i].createdAt = arr[i].created_at;
 
 			if (arr[i].creator.id == this.state.user_id )
 				arr[i].position = 'right';
@@ -137,6 +138,7 @@ export default class Messenger extends React.Component {
 			delete arr[i].id;
 			delete arr[i].content;
 			delete arr[i].creator;
+			delete arr[i].user.created_at;
 		}
 
 		this.setState((previousState) => {
@@ -159,6 +161,7 @@ export default class Messenger extends React.Component {
     	});
 
 		this._createMessage(messages)
+
 	}
 
 	_createMessage(data) {
@@ -195,18 +198,17 @@ export default class Messenger extends React.Component {
   	   Render
   	------------------------------------------------------------------------------------------------------------------------------------------------------ */
   	
-  	render() {
-	    return (
-	      <GiftedChat
-	        messages={this.state.messages}
-	        onSend={this.onSend}
-	        user={{
-	          _id: this.state.user_id,
-	          name: this.state.user_name,
-	          avatar: this.state.profile_picture
-	        }}
-
-	      />
-	    );
-  	}
+	render() {
+		return (
+			<GiftedChat
+				messages={this.state.messages}
+				onSend={this.onSend}
+				user={{
+					_id: this.state.user_id,
+					name: this.state.user_name,
+					avatar: this.state.profile_picture
+				}}
+			/>
+		);
+	}
 }
