@@ -79,10 +79,10 @@ class MapPage extends Component {
 				sliderValue: 0.3,
 		  		name: 'initial',
 		  		region: {
-				      	latitude: 0,
-				      	longitude: 0,
-				      	latitudeDelta: 0.0922,
-				      	longitudeDelta: 0.0421,
+			      	latitude: 0,
+			      	longitude: 0,
+			      	latitudeDelta: 0.0922,
+			      	longitudeDelta: 0.0421,
 				},
 				markers: [],
 	      		event_guests_pictures: [""]
@@ -100,17 +100,17 @@ class MapPage extends Component {
 	          			longitude: position.coords.longitude
 	        		},
 	        		region: {
-			      	latitude: position.coords.latitude,
+			      		latitude: position.coords.latitude,
 	          			longitude: position.coords.longitude,
 	          			latitudeDelta: 0.09,
-      				longitudeDelta: 0.0421,
+      					longitudeDelta: 0.0421,
 	        		}
 	        	});
 			        	
 				this._onMapLoad(this.state.center);
 			},
 
-	      		(error) => alert(error.message),
+  			(error) => alert(error.message),
 	      		{enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
 		);
 

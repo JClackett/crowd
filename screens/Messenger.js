@@ -27,7 +27,10 @@ class Messenger extends React.Component {
   	
   	constructor(props) {
 	    super(props);
-	    this.state = {messages: []};
+	    this.state = {
+	    	messages: [],
+	    	event_id: this.props.event_id,
+    	};
 	    this.onSend = this.onSend.bind(this);
 	}
 
@@ -66,8 +69,15 @@ class Messenger extends React.Component {
 	}
 
 	_urlForMessageQuery(event_id) {
-		var id = event_id;
-		return 'http://localhost:3000/events/' + id;
+		var params = {
+		      	event_id: event_id,
+	  	};
+	 
+		var querystring = Object.keys(params)
+		.map(key => key + '=' + encodeURIComponent(params[key]))
+		.join('&');
+
+		return 'http://localhost:3000/messages?' + querystring;
 	}
 
 	getMessages(query) {
@@ -109,9 +119,33 @@ class Messenger extends React.Component {
 
 	showMessages(messages) {
 
+		var arr = messages;
+
+		for (var i = 0; i<arr.length; i++) {
+			arr[i]._id = arr[i].id;
+		    arr[i].text = arr[i].content;
+		    arr[i].user = arr[i].creator;
+
+		    var user_arr = arr[i].user
+			
+			for (var i = 0; i<user_arr.length; i++) {
+				user_arr[i]._id = user_arr[i].id;
+			    user_arr[i].avatar = user_arr[i].facebook_picture;
+
+			    delete user_arr[i].id;
+			    delete user_arr[i].facebook_picture;
+			}
+
+		    delete arr[i].id;
+		    delete arr[i].content;
+		    delete arr[i].creator;
+		}
+
+		console.log(arr[0].user)
+
 		this.setState({
 			messages:
-  				[messages]
+  				[arr]
 		});
 
 	}
@@ -126,6 +160,37 @@ class Messenger extends React.Component {
 	        	messages: GiftedChat.append(previousState.messages, messages),
 	      	};
 		});
+		this._createMessage(messages)
+	}
+
+	_createMessage(data) {
+		AsyncStorage.getItem("access_token").then((value) => {
+			fetch("http://localhost:3000/messages", {
+				method: "POST",
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+					'Authorization': 'Token token=' + value
+				},
+				body: JSON.stringify({
+					event_id: this.props.event_id,
+					content: data[0].text,
+				})
+			})
+			.then((response) => {
+				return response.json()
+			})
+			.then((responseData) => {
+				return responseData;
+			})
+			.then((data) => { 
+				// console.log(data)
+			})
+			.catch(function(err) {
+		  	})
+			.done();
+		}).done();
+
 	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -138,7 +203,7 @@ class Messenger extends React.Component {
 	        messages={this.state.messages}
 	        onSend={this.onSend}
 	        user={{
-	          _id: 1,
+	          _id: this.state.user_id,
 	          name: this.state.user_name
 	        }}
 	      />
