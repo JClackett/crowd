@@ -613,7 +613,7 @@ class MapPage extends Component {
 
 		return (
 
-    			<View style={styles.container}>
+    			<View style={styles.cuntainer}>
 
 		    		<MapView
 		    			style={styles.map}
@@ -637,7 +637,7 @@ class MapPage extends Component {
 							              	y: -22
 							            }}
 							>
-								<View style={styles.container}>
+								<View style={styles.cuntainer}>
 						        	<View style={styles.marker}>
 							        	<Image 
 											source={require('../map-marker.png')}
@@ -792,7 +792,7 @@ class MapPage extends Component {
 
 const styles = EStyleSheet.create({
 
-	container: {
+	cuntainer: {
 		position: 'absolute',
 	    top: 0,
 	    left: 0,
