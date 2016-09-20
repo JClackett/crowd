@@ -24,7 +24,6 @@ export default class Messenger extends React.Component {
 
 	    this.state = {
 	      	messages: [],
-	    	event_id: this.props.event_id,
     	};
 
 	    this.onSend = this.onSend.bind(this);
@@ -61,7 +60,6 @@ export default class Messenger extends React.Component {
   	
 
   	onMessengerLoad(event_id) {
-  		console.log(this.props);
 	  	var query = this._urlForMessageQuery(event_id);
 	  	this.getMessages(query);
 	}
@@ -127,8 +125,6 @@ export default class Messenger extends React.Component {
 
 		    arr[i].user._id = arr[i].user.id;
 		    arr[i].user.avatar = arr[i].user.facebook_picture;
-
-		    arr[i].position = 'right';
 
 			delete arr[i].user.id;
 			delete arr[i].user.created_at;
@@ -196,14 +192,16 @@ export default class Messenger extends React.Component {
   	------------------------------------------------------------------------------------------------------------------------------------------------------ */
   	
   	render() {
+
+  		var user_id = parseInt(this.state.user_id);
+
 	    return (
 	      <GiftedChat
 	        messages={this.state.messages}
 	        onSend={this.onSend}
 	        user={{
-	          _id: this.state.user_id,
+	          _id: user_id,
 	          name: this.state.user_name,
-	          avatar: this.state.profile_picture
 	        }}
 	      />
 	    );
