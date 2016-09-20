@@ -647,6 +647,7 @@ class MapPage extends Component {
 							              	y: -22
 							            }}
 							>
+
 								<View style={styles.container}>
 								        	<View style={styles.marker}>
 									        	<Image 

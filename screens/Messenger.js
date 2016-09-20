@@ -1,36 +1,32 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { GiftedChat } from 'react-native-gifted-chat';
+import {GiftedChat, Actions, Bubble} from 'react-native-gifted-chat';
 
 import {
-	StyleSheet,
 	AsyncStorage,
 	Text,
 	View,
-	TextInput,
-	TouchableOpacity,
-	Image,
-	Dimensions,
 } from 'react-native';
 
-const window = Dimensions.get('window');
-var margin = (window.width)*0.1
-var theWidth = (window.width)-margin*2
+import EStyleSheet from 'react-native-extended-stylesheet';
+import theme from '../theme';
 
-
-class Messenger extends React.Component {
+export default class Messenger extends React.Component {
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
   	   Initializers
   	------------------------------------------------------------------------------------------------------------------------------------------------------ */
   	
   	constructor(props) {
+
 	    super(props);
+
 	    this.state = {
 	    	messages: [],
 	    	event_id: this.props.event_id,
     	};
+
 	    this.onSend = this.onSend.bind(this);
 	}
 
@@ -70,7 +66,7 @@ class Messenger extends React.Component {
 
 	_urlForMessageQuery(event_id) {
 		var params = {
-		      	event_id: event_id,
+	      	event_id: event_id,
 	  	};
 	 
 		var querystring = Object.keys(params)
@@ -119,35 +115,30 @@ class Messenger extends React.Component {
 
 	showMessages(messages) {
 
-		var arr = messages;
+		var arr = messages.reverse();
 
 		for (var i = 0; i<arr.length; i++) {
 			arr[i]._id = arr[i].id;
 		    arr[i].text = arr[i].content;
 		    arr[i].user = arr[i].creator;
 
-		    var user_arr = arr[i].user
-			
-			for (var i = 0; i<user_arr.length; i++) {
-				user_arr[i]._id = user_arr[i].id;
-			    user_arr[i].avatar = user_arr[i].facebook_picture;
+		    var user_arr = arr[i].user;
 
-			    delete user_arr[i].id;
-			    delete user_arr[i].facebook_picture;
-			}
+		    user_arr._id = user_arr.id;
+		    user_arr.avatar = user_arr.facebook_picture;
 
+			delete user_arr.id;
+		    delete user_arr.facebook_picture;
 		    delete arr[i].id;
 		    delete arr[i].content;
 		    delete arr[i].creator;
 		}
 
-		console.log(arr[0].user)
-
-		this.setState({
-			messages:
-  				[arr]
-		});
-
+		this.setState((previousState) => {
+	      	return {
+		        messages: GiftedChat.append(previousState.messages, messages),
+	      	};
+    	});
 	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -155,11 +146,13 @@ class Messenger extends React.Component {
   	------------------------------------------------------------------------------------------------------------------------------------------------------ */
   
   	onSend(messages = []) {
-    	this.setState((previousState) => {
+
+		this.setState((previousState) => {
 	      	return {
-	        	messages: GiftedChat.append(previousState.messages, messages),
+		        messages: GiftedChat.append(previousState.messages, messages),
 	      	};
-		});
+    	});
+
 		this._createMessage(messages)
 	}
 
@@ -204,21 +197,11 @@ class Messenger extends React.Component {
 	        onSend={this.onSend}
 	        user={{
 	          _id: this.state.user_id,
-	          name: this.state.user_name
+	          name: this.state.user_name,
+	          avatar: this.state.profile_picture
 	        }}
+
 	      />
 	    );
   	}
 }
-
-
-
-/* ------------------------------------------------------------------------------------------------------------------------------------------------------
-   Styles
------------------------------------------------------------------------------------------------------------------------------------------------------- */
-
-var styles = StyleSheet.create({
-
-});
-
-module.exports = Messenger;
