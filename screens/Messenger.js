@@ -50,7 +50,7 @@ export default class Messenger extends React.Component {
 		this.setState({user_name: user_name});
 		this.setState({user_id: user_id});
 
-	    this.onMessengerLoad(this.props.event_id);
+	   	this.onMessengerLoad(this.props.event_id);
 
 	}
 
@@ -119,26 +119,31 @@ export default class Messenger extends React.Component {
 
 		for (var i = 0; i<arr.length; i++) {
 			arr[i]._id = arr[i].id;
-		    arr[i].text = arr[i].content;
-		    arr[i].user = arr[i].creator;
+			arr[i].text = arr[i].content;
+			arr[i].user = arr[i].creator;
 
-		    var user_arr = arr[i].user;
+			if (arr[i].creator.id == this.state.user_id )
+				arr[i].position = 'right';
+			else {
+				arr[i].position = 'left';
+			}
 
-		    user_arr._id = user_arr.id;
-		    user_arr.avatar = user_arr.facebook_picture;
+			var user_arr = arr[i].user;
+			user_arr._id = user_arr.id;
+			user_arr.avatar = user_arr.facebook_picture;
 
 			delete user_arr.id;
-		    delete user_arr.facebook_picture;
-		    delete arr[i].id;
-		    delete arr[i].content;
-		    delete arr[i].creator;
+			delete user_arr.facebook_picture;
+			delete arr[i].id;
+			delete arr[i].content;
+			delete arr[i].creator;
 		}
 
 		this.setState((previousState) => {
-	      	return {
-		        messages: GiftedChat.append(previousState.messages, messages),
-	      	};
-    	});
+		      	return {
+			        messages: GiftedChat.append(previousState.messages, arr),
+		      	};
+    		});
 	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
