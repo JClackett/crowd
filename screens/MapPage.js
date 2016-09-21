@@ -763,7 +763,7 @@ class MapPage extends Component {
 				   Create Modal
 				------------------------------------------------------------------------------------------------------------------------------------------------------ */}
 
-				<Modal style={styles.form_modal} ref={"form_modal"} swipeToClose={this.state.swipeToClose} onClosed={this.onFormClosed.bind(this)} onOpened={this.onOpen} onClosingState={this.onClosingState} backdropOpacity={0.5}  backdropColor={"white"} >
+				<Modal style={styles.form_modal} ref={"form_modal"} position={"top"} swipeToClose={this.state.swipeToClose} onClosed={this.onFormClosed.bind(this)} onOpened={this.onOpen} onClosingState={this.onClosingState} backdropOpacity={0.5}  backdropColor={"white"} >
 									
 
 					{/*<TouchableOpacity onPress={this.inviteToEvent.bind(this)} style={{alignItems: 'center'}}>
@@ -810,11 +810,11 @@ const styles = EStyleSheet.create({
 
 	container: {
 		position: 'absolute',
-	    top: 0,
-	    left: 0,
-	    right: 0,
-	    bottom: 0,
-	    justifyContent: 'flex-end',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		justifyContent: 'flex-end',
   	},
 
   	marker: {
@@ -850,6 +850,7 @@ const styles = EStyleSheet.create({
 
 	form_modal: {
 		alignItems: 'center',
+		marginTop:30,
 		height:300,
 		width:'$theWidth',
 		borderRadius: 20,
