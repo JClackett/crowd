@@ -1,7 +1,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import {GiftedChat, Actions, Bubble} from 'react-native-gifted-chat';
+import {GiftedChat, Actions, Bubble, Send} from 'react-native-gifted-chat';
 
 import {
 	AsyncStorage,
@@ -27,6 +27,9 @@ export default class Messenger extends React.Component {
 		};
 
 		this.onSend = this.onSend.bind(this);
+	    this.renderBubble = this.renderBubble.bind(this);
+	    this.renderSend = this.renderSend.bind(this);
+
 	}
 
   	componentDidMount() {
@@ -158,6 +161,42 @@ export default class Messenger extends React.Component {
 
 	}
 
+	renderSend(props) {
+	    return (
+	      <Send
+  	        {...props}
+  	        label={'Message'}
+	        textStyle={{
+	            color: '#F87960',
+			}}
+	      />
+	    );
+  	}
+
+  	renderBubble(props) {
+	    return (
+	      <Bubble
+	        {...props}
+	        wrapperStyle={{
+	          left: {
+	            backgroundColor: '#F87960',
+	          },
+  	          right: {
+	            backgroundColor: '#0C4E64',
+	          }
+	        }}
+	        textStyle={{
+				left: {
+		            color: 'white',
+	          	},
+	          		right: {
+        			color: 'white',
+          		}
+			}}
+	      />
+	    );
+  	}
+
 	_createMessage(data) {
 		AsyncStorage.getItem("access_token").then((value) => {
 			fetch("http://localhost:3000/messages", {
@@ -204,6 +243,8 @@ export default class Messenger extends React.Component {
 					_id: user_id,
 					name: this.state.user_name,
 				}}
+				renderBubble={this.renderBubble}
+				renderSend={this.renderSend}
 			/>
 		);
 	}
