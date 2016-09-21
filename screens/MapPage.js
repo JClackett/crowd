@@ -640,7 +640,7 @@ class MapPage extends Component {
 					              	latitude: marker.latitude,
 					              	longitude: marker.longitude
 					            }}
-					            onSelect={() => this.fetchInfo(marker)}
+					            onPress={() => this.fetchInfo(marker)}
 					            flat= {true}
 					            centerOffset= {{
 					            	x: 11,
