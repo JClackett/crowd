@@ -20,13 +20,13 @@ export default class Messenger extends React.Component {
   	
   	constructor(props) {
 
-	    super(props);
+		super(props);
 
-	    this.state = {
-	      	messages: [],
-    	};
+		this.state = {
+			messages: [],
+		};
 
-	    this.onSend = this.onSend.bind(this);
+		this.onSend = this.onSend.bind(this);
 	}
 
   	componentDidMount() {
@@ -34,7 +34,7 @@ export default class Messenger extends React.Component {
   	}
 
   	componentWillMount() {
-	    this.onMessengerLoad(this.props.event_id);
+		this.onMessengerLoad(this.props.event_id);
   	}
 
 
@@ -66,7 +66,7 @@ export default class Messenger extends React.Component {
 
 	_urlForMessageQuery(event_id) {
 		var params = {
-	      	event_id: event_id,
+	      		event_id: event_id,
 	  	};
 	 
 		var querystring = Object.keys(params)
@@ -119,26 +119,27 @@ export default class Messenger extends React.Component {
 
 		for (var i = 0; i<arr.length; i++) {
 			arr[i]._id = arr[i].id;
-		    arr[i].text = arr[i].content;
-		    arr[i].user = arr[i].creator;
-		    arr[i].createdAt = arr[i].created_at;
+			arr[i].text = arr[i].content;
+			arr[i].user = arr[i].creator;
+		    	arr[i].createdAt = arr[i].created_at;
 
-		    arr[i].user._id = arr[i].user.id;
-		    arr[i].user.avatar = arr[i].user.facebook_picture;
+			var user_arr = arr[i].user;
+			user_arr._id = user_arr.id;
+			user_arr.avatar = user_arr.facebook_picture;
 
-			delete arr[i].user.id;
+			delete user_arr.id;
+			delete user_arr.facebook_picture;
+			delete arr[i].id;
+			delete arr[i].content;
+			delete arr[i].creator;
 			delete arr[i].user.created_at;
-		    delete arr[i].user.facebook_picture;
-		    delete arr[i].id;
-		    delete arr[i].content;
-		    delete arr[i].creator;
 		}
 
 		this.setState((previousState) => {
-	      	return {
-		        messages: GiftedChat.append(previousState.messages, arr),
-	      	};
-    	});
+		      	return {
+			        messages: GiftedChat.append(previousState.messages, arr),
+		      	};
+    		});
 	}
 
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -191,19 +192,20 @@ export default class Messenger extends React.Component {
   	   Render
   	------------------------------------------------------------------------------------------------------------------------------------------------------ */
   	
-  	render() {
+	render() {
 
-  		var user_id = parseInt(this.state.user_id);
+		var user_id = parseInt(this.state.user_id);
 
-	    return (
-	      <GiftedChat
-	        messages={this.state.messages}
-	        onSend={this.onSend}
-	        user={{
-	          _id: user_id,
-	          name: this.state.user_name,
-	        }}
-	      />
-	    );
-  	}
+		return (
+			<GiftedChat
+				messages={this.state.messages}
+				onSend={this.onSend}
+				user={{
+					_id: user_id,
+					name: this.state.user_name,
+				}}
+			/>
+		);
+	}
+
 }
