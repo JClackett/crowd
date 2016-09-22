@@ -40,7 +40,10 @@ import t from 'tcomb-form-native';
 var Form = t.form.Form;
 
 import LoginPage from './LoginPage';
-var loginButton;
+
+var eventButton;
+var editEventButton;
+
 
 // Set up the styling using theme.js
 EStyleSheet.build(theme);
@@ -87,7 +90,7 @@ class MapPage extends Component {
 			      	longitudeDelta: 0,
 			},
 			markers: [],
-      			event_guests_pictures: [""]
+      			event_guests_pictures: [""],
     		};
 
   	}	
@@ -95,18 +98,18 @@ class MapPage extends Component {
   	componentDidMount() {
 		navigator.geolocation.getCurrentPosition(
 			(position) => {     	
-        		this.setState({
-	        		center: {
-	          			latitude: position.coords.latitude,
-	          			longitude: position.coords.longitude
-	        		},
-	        		region: {
-			      	latitude: position.coords.latitude,
-	          			longitude: position.coords.longitude,
-	          			latitudeDelta: 0.5,
-      				longitudeDelta: 0.1,
-	        		},
-	        	});
+		        		this.setState({
+			        		center: {
+			          			latitude: position.coords.latitude,
+			          			longitude: position.coords.longitude
+			        		},
+			        		region: {
+					      	latitude: position.coords.latitude,
+			          			longitude: position.coords.longitude,
+			          			latitudeDelta: 0.5,
+		      				longitudeDelta: 0.1,
+			        		},
+			        	});
 
 				this._onMapLoad(this.state.center);
 			},
@@ -132,8 +135,6 @@ class MapPage extends Component {
 		});
 
 	  	this._loadInitialState().done();
-		
-	  	// this.refs.join_button.fadeOut(1);
 
 	}
 
@@ -157,7 +158,7 @@ class MapPage extends Component {
 		this.setState({user_id: user_id});
 		this.setState({event_modal: false});
 		this.setState({settings_modal: false});
-		this.setState({create_modal: false});
+		this.setState({form_modal: false});
 
 		const inviteLinkContent = {
 			applinkUrl: "https://fb.me/1756096064669863",
@@ -183,17 +184,16 @@ class MapPage extends Component {
 
 	openForm(id) {
 		this.refs.form_modal.open();
-		this.setState({create_modal: true});
 		this.refs.create_button.bounceOutDown(1000)
-	}
-
-	closeForm(id) {
-		this.refs.form_modal.close();
+		this.setState({form_modal: true});
 	}
 
 	onFormClosed() {
-		this.refs.create_button.bounceInUp(800)
-		this.setState({create_modal: false});
+
+		if (this.state.settings_modal  == false ){
+			this.refs.create_button.bounceInUp(800);
+		}
+		this.setState({form_modal: false});
 	}
 
 	openEvent(id) {
@@ -202,25 +202,25 @@ class MapPage extends Component {
 
 	 	this.refs.event_modal.open();
 
+		
+
 		// Is the user the creator, a guest or not
   		if (this.state.event_creator_id == this.state.user_id) { 
-			loginButton = <Button onPress={this.deleteEvent.bind(this)} style={styles.delete_button}>Delete</Button>;
-			this.setState({update_button: true});
+			eventButton = <Button onPress={this.deleteEvent.bind(this)} style={styles.delete_button}>Delete</Button>;
+			editEventButton = <Image source={require('../edit-icon.png')} style={styles.message_icon} />
+
 		} else if (this.state.event_users == true) {
-			loginButton = <Button onPress={this.leaveEvent.bind(this)} style={styles.main_button}>Leave</Button>;
-			this.setState({update_button: true});
+			eventButton = <Button onPress={this.leaveEvent.bind(this)} style={styles.main_button}>Leave</Button>;
 		} else {
-		  	loginButton = <Button onPress={this.joinEvent.bind(this)} style={styles.main_button}>Crash</Button>;
-			this.setState({update_button: true});
+		  	eventButton = <Button onPress={this.joinEvent.bind(this)} style={styles.main_button}>Crash</Button>;
 		}
 
-	  	if (this.state.event_modal == false) {
+		if (this.state.settings_modal == false) {
 	  		this.refs.create_button.bounceOutDown(500);
 			this.refs.join_button.bounceInUp(500);
 		}
 
 		this.setState({event_modal: true});
-
 	}
 
 
@@ -243,6 +243,8 @@ class MapPage extends Component {
 	  			this.setState({event_users: true});
 	  		}
 	  	};
+
+	  	// Make array of event guests pictures
 	  	
 	  	var eventGuestsPictureArr = [];
 
@@ -252,38 +254,39 @@ class MapPage extends Component {
 
 	  	this.setState({event_guests_pictures: eventGuestsPictureArr});
 
-
 	}		
 
-	closeEvent(id) {
-		this.refs.event_modal.close();
-	}
-
 	onEventClosed(id) {
-		this.setState({event_modal: false});
 
-		if (this.state.settings_modal == false) {
-			this.refs.create_button.bounceInUp(500);
-			this.refs.join_button.bounceOutDown(500);
-		}
-	}
-
-  	openSettings(id) {
-		this.refs.settings_modal.open();
-		this.setState({settings_modal: true});
-
-		if (this.state.event_modal == true) {
-			this.refs.event_modal.close();
+		if (this.state.settings_modal  == true ){
 			this.refs.join_button.bounceOutDown(500);
 		}
 		else {
-			this.refs.create_button.bounceOutDown(500);
+			this.refs.join_button.bounceOutDown(500);
+			this.refs.create_button.bounceInUp(800);
 		}
+		this.setState({event_modal: false});
+
 	}
 
-	closeSettings(id) {
-		this.refs.settings_modal.close();
-	}	
+  	openSettings(id) {
+
+  		if (this.state.settings_modal == false) {
+  			this.refs.create_button.bounceOutDown(500);
+  		}
+
+		this.setState({settings_modal: true});
+
+		if (this.state.form_modal == true) {
+  			this.refs.form_modal.close();
+  		}
+
+  		if (this.state.event_modal == true ) {
+  			this.refs.event_modal.close();
+  		}
+
+		this.refs.settings_modal.open();
+	}
 
 	onSettingsClosed() {
 		this.refs.create_button.bounceInUp(500);
@@ -400,13 +403,13 @@ class MapPage extends Component {
 	_displayEvents(events) {
 		var Events = [];
 		events.forEach(function(event) {
-    		Events.push({
-    			key: event.id,
-    			id: event.id,
-        		latitude: event.latitude, 
-        		longitude: event.longitude,		
-        		icon: event.creator.facebook_picture 	
-		    })
+			Events.push({
+				key: event.id,
+				id: event.id,
+				latitude: event.latitude, 
+				longitude: event.longitude,		
+				icon: event.creator.facebook_picture 	
+			})
 		});
 
 		this.setState({
@@ -605,15 +608,15 @@ class MapPage extends Component {
 
 		this.props.navigator.push({
 			screen: "Crowd.Messenger",
-		    navigatorStyle: {
-		    	navBarTextColor: '#fff',
-			  	navBarBackgroundColor: '#074E64',
-			  	navBarButtonColor: '#fff',
-		      	statusBarTextColorScheme: 'light'
-		    },
-		    passProps: {event_id: event_id},
+			navigatorStyle: {
+				navBarTextColor: '#fff',
+				navBarBackgroundColor: '#074E64',
+				navBarButtonColor: '#fff',
+				statusBarTextColorScheme: 'light'
+			},
+			passProps: {event_id: event_id},
 			titleImage: require('./../logo.png'),
-	      	statusBarTextColorScheme: 'light'
+			statusBarTextColorScheme: 'light'
 		});
 	}
 
@@ -630,38 +633,38 @@ class MapPage extends Component {
 		    			style={styles.map}
 				          	showsUserLocation={true}
 				          	followsUserLocation={true}
-			  		>
+			  	>
 
-				  		{this.state.markers.map(marker => (
-							<MapView.Marker
+			  		{this.state.markers.map(marker => (
+						<MapView.Marker
 						    	style={styles.marker}
 						    	key={marker.key}
 						      	coordinate={{
-					              	latitude: marker.latitude,
-					              	longitude: marker.longitude
-					            }}
-					            onPress={() => this.fetchInfo(marker)}
-					            flat= {true}
-					            centerOffset= {{
-					            	x: 11,
-					              	y: -22
-					            }}
-							>
+						              	latitude: marker.latitude,
+						              	longitude: marker.longitude
+						            }}
+						            onPress={() => this.fetchInfo(marker)}
+						            flat= {true}
+						            centerOffset= {{
+						            	x: 11,
+						              	y: -22
+						            }}
+						>
 
-								<View style={styles.container}>
-						        	<View style={styles.marker}>
-							        	<Image 
-											source={require('../map-marker.png')}
-											style={styles.event_marker}
-										/>
-							          	<Image 
-											source={{uri: marker.icon}}
-											style={styles.event_icon}
-										/>
-									</View>
+							<View style={styles.container}>
+						        		<View style={styles.marker}>
+								        	<Image 
+										source={require('../map-marker.png')}
+										style={styles.event_marker}
+									/>
+								          	<Image 
+										source={{uri: marker.icon}}
+										style={styles.event_icon}
+									/>
 								</View>
-							</MapView.Marker>
-					  	))}
+							</View>
+						</MapView.Marker>
+				  	))}
 
 				</MapView>
 				{/* ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -714,6 +717,13 @@ class MapPage extends Component {
 						{this.state.event_description}
 					</Text>
 
+					<TouchableOpacity onPress={() => this.openForm()} style={{bottom: 0, right: 0,position: "absolute"}} >
+					
+						{editEventButton}
+					
+					</TouchableOpacity>
+
+
 				</Modal>
 
 				{/* ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -723,7 +733,7 @@ class MapPage extends Component {
 				<Modal style={styles.settings_modal} ref={"settings_modal"} entry={"top"} swipeToClose={this.state.swipeToClose} onClosed={this.onSettingsClosed.bind(this)} onOpened={this.onSettingsOpened} onClosingState={this.onClosingState} backdropOpacity={0.5}  backdropColor={"white"} >
 
 					<Image
-						style={styles.facebook_icon}
+						style={styles.facebook_picture}
 						source={{uri: this.state.facebook_picture}}
 					/>
 
@@ -732,7 +742,7 @@ class MapPage extends Component {
 					</Text>
 
 					<LoginButton
-						style={styles.login}
+						style={styles.login_button}
 						readPermissions={["public_profile", "email", "user_friends"]}
 						onLogoutFinished={ () =>
 							this.props.navigator.push({
@@ -743,7 +753,7 @@ class MapPage extends Component {
 							    }
 							})
 						}
-						/>
+					/>
 
 				</Modal>
 
@@ -751,9 +761,8 @@ class MapPage extends Component {
 				   Main Buttons
 				------------------------------------------------------------------------------------------------------------------------------------------------------ */}
 				<Animatable.View ref="join_button">
-					{loginButton}
+					{eventButton}
 				</Animatable.View>
-
 
 				<Animatable.View ref="create_button">
 					<Button onPress={this.openForm.bind(this)} style={styles.main_button}>What are you up to?</Button>
@@ -861,18 +870,6 @@ const styles = EStyleSheet.create({
 		shadowOpacity: 0.3,
 	},
 
-	events_modal: {
-		alignItems: 'center',
-		height: 250,
-		width:'$theWidth',
-		backgroundColor: "$redColor",
-		borderRadius: 30,
-		shadowRadius: 2,
-		shadowOffset: {width: 1, height: 1},
-		shadowColor: 'black',
-		shadowOpacity: 0.3,
-	},
-
 	settings_modal: {
 		alignItems: 'center',
 		height:400,
@@ -884,15 +881,22 @@ const styles = EStyleSheet.create({
 		shadowOpacity: 0.3,
 	},
 
-	button: {
-		backgroundColor: '#1ECE6D',
-		padding: 10,
-		color: "white",
-		marginTop:20,
-		width: 170,
-		letterSpacing: 1,
-		fontSize: 14,
-		justifyContent: 'center'
+	login_button: {
+		height: 30,
+		marginTop:120,
+		width:200,
+	},
+
+	events_modal: {
+		alignItems: 'center',
+		height: 250,
+		width:'$theWidth',
+		backgroundColor: "$redColor",
+		borderRadius: 30,
+		shadowRadius: 2,
+		shadowOffset: {width: 1, height: 1},
+		shadowColor: 'black',
+		shadowOpacity: 0.3,
 	},
 
 	main_button: {
@@ -931,19 +935,26 @@ const styles = EStyleSheet.create({
 		width: '$theWidth',
 	},
 
-	settings_button: {
+	edit_button: {
 		position: 'absolute',
+		backgroundColor: "$redColor",
+		color: "white",
+		textAlign: "center",
+		padding: 15,
+		margin: '$margin',
+		bottom: 60,
 		shadowRadius: 2,
 		shadowOffset: {width: 1, height: 1},
 		shadowColor: 'black',
 		shadowOpacity: 0.45,
-		bottom: 610,
-		left: 10,
-		width:30,
-		height:30,
+		letterSpacing: 1,
+		fontSize: 15,
+		fontFamily: 'Helvetica',
+		width: '$theWidth',
+
 	},
 
-	facebook_icon: {
+	facebook_picture: {
 		width: 100,
 		height: 100,
 		marginTop:40,
@@ -1033,11 +1044,6 @@ const styles = EStyleSheet.create({
 		marginTop: 50,
 	},
 
-	login: {
-		height: 30,
-		marginTop:120,
-		width:200,
-	},
 });
 
 module.exports = MapPage;
