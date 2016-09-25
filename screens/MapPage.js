@@ -91,7 +91,6 @@ class MapPage extends Component {
       			event_guests_pictures: [""],
       			isCreator: false,
       			isGuest: false,
-
     		};
 
   	}	
@@ -226,7 +225,7 @@ class MapPage extends Component {
 	  	this.setState({event_creator_picture: event.creator.facebook_picture});
 	  	this.setState({event_guests: event.users});
 		this.setState({event_users: false});
-		this.setState({isCreator: false})
+		this.setState({isCreator: false});
 
 	  	// See if current user is a guest of the event, if so, will show the leave button^^^
 		var x;
@@ -239,7 +238,6 @@ class MapPage extends Component {
 	  	};
 
 	  	// Make array of event guests pictures
-	  	
 	  	var eventGuestsPictureArr = [];
 
 		event.users.slice(0,3).forEach(function(user) {
@@ -570,7 +568,7 @@ class MapPage extends Component {
 				if (result.isCancelled) {
 					alert('invite cancelled');
 				} else {
-					alert('invite success with postId: '+ result.postId);
+					console.log(result);
 				}
 			},
 			function(error) {
@@ -761,11 +759,11 @@ class MapPage extends Component {
 				<Modal style={styles.form_modal} ref={"form_modal"} position={"top"} swipeToClose={this.state.swipeToClose} onClosed={this.onFormClosed.bind(this)} onOpened={this.onOpen} onClosingState={this.onClosingState} backdropOpacity={0.5}  backdropColor={"white"} >
 									
 
-					{/*<TouchableOpacity onPress={this.inviteToEvent.bind(this)} style={{alignItems: 'center'}}>
+					<TouchableOpacity onPress={this.inviteToEvent.bind(this)} style={{alignItems: 'center'}}>
 					
 						<Text>Invite</Text>
 					
-					</TouchableOpacity>*/}
+					</TouchableOpacity>
 
 
 					<View style={{marginTop:30}}>
