@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {GiftedChat, Actions, Bubble, Send} from 'react-native-gifted-chat';
 
 import {
@@ -17,7 +17,7 @@ export default class Messenger extends React.Component {
 	/* ------------------------------------------------------------------------------------------------------------------------------------------------------
   	   Initializers
   	------------------------------------------------------------------------------------------------------------------------------------------------------ */
-  	
+
   	constructor(props) {
 
 		super(props);
@@ -27,8 +27,8 @@ export default class Messenger extends React.Component {
 		};
 
 		this.onSend = this.onSend.bind(this);
-	    this.renderBubble = this.renderBubble.bind(this);
-	    this.renderSend = this.renderSend.bind(this);
+		this.renderBubble = this.renderBubble.bind(this);
+		this.renderSend = this.renderSend.bind(this);
 
 	}
 
@@ -152,50 +152,50 @@ export default class Messenger extends React.Component {
   	onSend(messages = []) {
 
 		this.setState((previousState) => {
-	      	return {
-		        messages: GiftedChat.append(previousState.messages, messages),
-	      	};
-    	});
+		      	return {
+			        messages: GiftedChat.append(previousState.messages, messages),
+		      	};
+    		});
 
 		this._createMessage(messages)
 
 	}
 
 	renderSend(props) {
-	    return (
-	      <Send
-  	        {...props}
-  	        label={'Message'}
-	        textStyle={{
-	            color: '#F87960',
-			}}
-	      />
-	    );
-  	}
+		return (
+			<Send
+				{...props}
+				label={'Message'}
+				textStyle={{
+					color: '#F87960',
+				}}
+			/>
+		);
+	}
 
-  	renderBubble(props) {
-	    return (
-	      <Bubble
-	        {...props}
-	        wrapperStyle={{
-	          left: {
-	            backgroundColor: '#F87960',
-	          },
-  	          right: {
-	            backgroundColor: '#0C4E64',
-	          }
-	        }}
-	        textStyle={{
-				left: {
-		            color: 'white',
-	          	},
-	          		right: {
-        			color: 'white',
-          		}
-			}}
-	      />
-	    );
-  	}
+	renderBubble(props) {
+		return (
+			<Bubble
+				{...props}
+				wrapperStyle={{
+					left: {
+						backgroundColor: '#F87960',
+					},
+					right: {
+						backgroundColor: '#0C4E64',
+					}
+				}}
+				textStyle={{
+					left: {
+						color: 'white',
+					},
+					right: {
+						color: 'white',
+					}
+				}}
+			/>
+		);
+	}
 
 	_createMessage(data) {
 		AsyncStorage.getItem("access_token").then((value) => {

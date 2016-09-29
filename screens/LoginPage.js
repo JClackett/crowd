@@ -115,12 +115,12 @@ class LoginPage extends Component {
 				statusBarTextColorScheme: 'light'
 			},
 			titleImage: require('./../logo.png'),
-		    navigatorButtons: {
-		      	leftButtons: [{
-		      		title: 'Settings', 
-			        id: 'settings', 
-		      	}]
-		    },
+			    navigatorButtons: {
+			      	leftButtons: [{
+			      		title: 'Settings', 
+				        id: 'settings', 
+			      	}]
+			    },
 		});
 	};
 
