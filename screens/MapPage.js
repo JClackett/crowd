@@ -586,6 +586,7 @@ class MapPage extends Component {
 			}
 		).then(
 			function(result) {
+				console.log(result);
 				if (result.isCancelled) {
 					alert('invite cancelled');
 				} else {
@@ -766,11 +767,11 @@ class MapPage extends Component {
 				<Modal style={styles.form_modal} ref={"form_modal"} swipeToClose={this.state.swipeToClose} onClosed={this.onFormClosed.bind(this)} onOpened={this.onOpen} onClosingState={this.onClosingState} backdropOpacity={0.5}  backdropColor={"white"} >
 									
 
-					{/*<TouchableOpacity onPress={this.inviteToEvent.bind(this)} style={{alignItems: 'center'}}>
+					<TouchableOpacity onPress={this.inviteToEvent.bind(this)} style={{alignItems: 'center'}}>
 					
 						<Text>Invite</Text>
 					
-					</TouchableOpacity>*/}
+					</TouchableOpacity>
 
 
 					<View style={{marginTop:30}}>
