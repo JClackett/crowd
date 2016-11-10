@@ -76,7 +76,7 @@ export default class Messenger extends React.Component {
 		.map(key => key + '=' + encodeURIComponent(params[key]))
 		.join('&');
 
-		return 'http://localhost:3000/messages?' + querystring;
+		return 'http://192.168.3.37:3000/messages?' + querystring;
 	}
 
 	getMessages(query) {
@@ -199,7 +199,7 @@ export default class Messenger extends React.Component {
 
 	_createMessage(data) {
 		AsyncStorage.getItem("access_token").then((value) => {
-			fetch("http://localhost:3000/messages", {
+			fetch("http://192.168.3.37:3000/messages", {
 				method: "POST",
 				headers: {
 					'Accept': 'application/json',

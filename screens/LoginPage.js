@@ -68,7 +68,7 @@ class LoginPage extends Component {
 	------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
 	_createUser(response) {
-		fetch("http://localhost:3000/users", {
+		fetch("http://192.168.3.37:3000/users", {
 			method: "POST",
 			headers: {
 				'Accept': 'application/json',

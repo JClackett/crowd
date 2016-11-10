@@ -41,6 +41,9 @@ import LoginPage from './LoginPage';
 
 var delete_button;
 var join_button;
+var leave_button;
+
+
 
 
 // Set up the styling using theme.js
@@ -91,6 +94,7 @@ class MapPage extends Component {
       			event_guests_pictures: [""],
       			isCreator: false,
       			isGuest: false,
+
     		};
 
   	}	
@@ -199,15 +203,16 @@ class MapPage extends Component {
   		if (this.state.event_creator_id == this.state.user_id) { 
 			this.setState({isCreator: true})
 			this.setState({isGuest: false})
-
 			delete_button = <Button onPress={this.deleteEvent.bind(this)} style={styles.delete_button}>Delete</Button>
 		} else if (this.state.event_users == true) {
 			this.setState({isGuest: true})
-			join_button = <Button onPress={this.leaveEvent.bind(this)} style={styles.join_button}>Leave</Button>
-
+			// join_button_alt = <Image source={require('../join-event-alt.png')} style={styles.join_button} />
+			join_button = <TouchableOpacity onPress={this.leaveEvent.bind(this)}><Image source={require('../leave-event.png')} style={styles.join_button} /></TouchableOpacity>
 		} else {
 			this.setState({isGuest: true})
-			join_button = <Button onPress={this.joinEvent.bind(this)} style={styles.join_button}>Crash</Button>
+			join_button = <TouchableOpacity onPress={this.joinEvent.bind(this)}><Image source={require('../join-event.png')} style={styles.join_button} /></TouchableOpacity>
+			// leave_button_alt = <Image source={require('../leave-event-alt.png')} style={styles.leave_button} />
+
 		}
 
 		this.refs.event_modal.open();
@@ -286,7 +291,7 @@ class MapPage extends Component {
 	------------------------------------------------------------------------------------------------------------------------------------------------------ */
 	_createEvent(details) {
 		AsyncStorage.getItem("access_token").then((value) => {
-			fetch("http://localhost:3000/events", {
+			fetch("http://192.168.3.37:3000/events", {
 				method: "POST",
 				headers: {
 					'Accept': 'application/json',
@@ -333,7 +338,7 @@ class MapPage extends Component {
 		.map(key => key + '=' + encodeURIComponent(params[key]))
 		.join('&');
 
-		return 'http://localhost:3000/events?' + querystring;
+		return 'http://192.168.3.37:3000/events?' + querystring;
 	}
 
 	_onMapLoad(center) {
@@ -408,7 +413,7 @@ class MapPage extends Component {
 
 	_urlForInfoQuery(event) {
 		var id = event.id;
-		return 'http://localhost:3000/events/' + id;
+		return 'http://192.168.3.37:3000/events/' + id;
 	}
 
 	_getEventInfo(infoQuery) {
@@ -450,7 +455,7 @@ class MapPage extends Component {
 	------------------------------------------------------------------------------------------------------------------------------------------------------ */
 	joinEvent() {
 		AsyncStorage.getItem("access_token").then((value) => {
-			fetch("http://localhost:3000/guests", {
+			fetch("http://192.168.3.37:3000/guests", {
 				method: "POST",
 				headers: {
 					'Accept': 'application/json',
@@ -485,7 +490,7 @@ class MapPage extends Component {
 	------------------------------------------------------------------------------------------------------------------------------------------------------ */
 	leaveEvent() {
 		AsyncStorage.getItem("access_token").then((value) => {
-			fetch("http://localhost:3000/guests", {
+			fetch("http://192.168.3.37:3000/guests", {
 				method: "DELETE",
 				headers: {
 					'Accept': 'application/json',
@@ -520,7 +525,7 @@ class MapPage extends Component {
 
 	deleteEvent() {
 		var id = this.state.event_id;
-		var query =  'http://localhost:3000/events/' + id;
+		var query =  'http://192.168.3.37:3000/events/' + id;
 
 		AsyncStorage.getItem("access_token").then((value) => {
 			fetch(query,{
@@ -663,22 +668,6 @@ class MapPage extends Component {
 				------------------------------------------------------------------------------------------------------------------------------------------------------ */}
 				<Modal style={styles.events_modal} ref={"event_modal"} backdropOpacity={0.3} animationDuration={300} swipeToClose={this.state.swipeToClose} onClosed={this.onEventClosed.bind(this)} onOpened={this.onEventOpened} onClosingState={this.onEventClosingState}>
 
-					{
-						this.state.event_guests_pictures.map(function(picture, index){
-							return (
-								<Image 
-									key={index}
-									source={{uri: picture}}
-									style={EStyleSheet.child(styles, 'event_guest', index, this.state.event_guests_pictures.length)}
-								/>
-							)
-
-						}.bind(this))
-					}
-
-					<Text style={styles.event_guest_count}>
-						{this.state.event_users_length + " going"}
-					</Text>
 
 					<Image 
 						source={{uri: this.state.event_creator_picture}}
@@ -706,6 +695,27 @@ class MapPage extends Component {
 
 					<Text style={styles.event_description}>
 						{this.state.event_description}
+					</Text>
+
+					<Image 
+						source={{uri: "../line.png"}}
+					/>
+
+					{
+						this.state.event_guests_pictures.map(function(picture, index){
+							return (
+								<Image 
+									key={index}
+									source={{uri: picture}}
+									style={EStyleSheet.child(styles, 'event_guest', index, this.state.event_guests_pictures.length)}
+								/>
+							)
+
+						}.bind(this))
+					}
+
+					<Text style={styles.event_guest_count}>
+						{this.state.event_users_length + " going"}
 					</Text>
 
 					<TouchableOpacity onPress={() => this.openForm()} style={{bottom: 20, right: 20,position: "absolute"}} >
@@ -759,11 +769,11 @@ class MapPage extends Component {
 				<Modal style={styles.form_modal} ref={"form_modal"} position={"top"} swipeToClose={this.state.swipeToClose} onClosed={this.onFormClosed.bind(this)} onOpened={this.onOpen} onClosingState={this.onClosingState} backdropOpacity={0.5}  backdropColor={"white"} >
 									
 
-					<TouchableOpacity onPress={this.inviteToEvent.bind(this)} style={{alignItems: 'center'}}>
+					{/* <TouchableOpacity onPress={this.inviteToEvent.bind(this)} style={{alignItems: 'center'}}>
 					
 						<Text>Invite</Text>
 					
-					</TouchableOpacity>
+					</TouchableOpacity> */}
 
 
 					<View style={{marginTop:30}}>
@@ -778,7 +788,7 @@ class MapPage extends Component {
 					<TouchableOpacity onPress={this.saveEvent.bind(this)} style={{alignItems: 'center'}}>
 						
 						<Image 
-							source={{uri: "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678134-sign-check-128.png"}}
+							source={{uri: "https://cdn4.iconfinder.com/data/icons/linecon/512/add-128.png"}}
 							style={styles.tick_icon}
 						/>
 						
@@ -816,35 +826,34 @@ const styles = EStyleSheet.create({
   	},
 
   	map: {
-	    position: 'absolute',
-	    top: 0,
-	    left: 0,
-	    right: 0,
-	    bottom: 0,
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
  	},
 
-	icon: {
-		borderRadius: 25
-	},
-
   	event_icon: {
-  		height: 33,
-  		width: 33,
-  		borderRadius: 20,
+		position: "absolute",
+  		height: 27,
+  		width: 27,
+  		top: 4,
+  		left: 3.8,
+  		borderRadius: 15,
   	},
 
   	event_marker: {
-		width: 55,
-		height: 55,
 		position: "absolute",
-		top: -3,
-		left: -11,
+		top: 0,
+		width: 50,
+		height: 50,
+		left: -8,
   	},
 
 	form_modal: {
 		alignItems: 'center',
 		marginTop:30,
-		height:300,
+		height:330,
 		width:'$theWidth',
 		borderRadius: 20,
 		backgroundColor: "#FFF",
@@ -873,7 +882,7 @@ const styles = EStyleSheet.create({
 
 	events_modal: {
 		alignItems: 'center',
-		height: 250,
+		height: 350,
 		width:'$theWidth',
 		backgroundColor: "$redColor",
 		borderRadius: 30,
@@ -885,21 +894,30 @@ const styles = EStyleSheet.create({
 
 	join_button: {
 		position: 'absolute',
-		backgroundColor: "$redColor",
-		color: "white",
-		textAlign: "center",
 		padding: 15,
 		bottom: -100,
+		left: 0,
+		width: 100,
+		height:61.43,
 		shadowRadius: 2,
 		shadowOffset: {width: 1, height: 1},
 		shadowColor: 'black',
 		shadowOpacity: 0.3,
-		left: -150,
-		letterSpacing: 1,
-		fontSize: 15,
-		fontFamily: 'Helvetica',
-		width: "$theWidth",
 	},
+
+	leave_button: {
+		position: 'absolute',
+		padding: 15,
+		bottom: -100,
+		left: -40,
+		width: 100,
+		height:61.43,
+		shadowRadius: 2,
+		shadowOffset: {width: 1, height: 1},
+		shadowColor: 'black',
+		shadowOpacity: 0.3,
+	},
+
 
 	add_icon_wrapper: {
 		position: 'absolute',
@@ -927,7 +945,7 @@ const styles = EStyleSheet.create({
 		shadowColor: 'black',
 		shadowOpacity: 0.3,
 		padding: 15,
-		bottom: -100,
+		bottom: -120,
 		left: -150,
 		letterSpacing: 1,
 		fontSize: 15,
@@ -938,6 +956,7 @@ const styles = EStyleSheet.create({
 	edit_icon: {
 		height :30,
 		width: 30,
+		bottom: 50,
 
 	},
 
@@ -1006,29 +1025,23 @@ const styles = EStyleSheet.create({
   		marginTop:5,
   	},
 	event_guest: {
-  		position: "absolute",
+		marginTop: 10,
   		height: 40,
   		borderColor: "white",
   		width: 40,
-  		top:0,
-  		marginTop: 10,
-  		left: 50,
   		borderRadius: 20,
   		borderWidth: 2,
   		borderColor: "#FFF"
 	},
 	'event_guest:last-child': {
-		left:30,
 	},
 	'event_guest:first-child': {
-		left:10,
+		left:0,
 	},
 
 	event_guest_count: {
   		color: "#FFF",
-  		left: 30,
-		position: 'absolute',
-		marginTop: 50,
+		marginTop: 10,
 	},
 
 });

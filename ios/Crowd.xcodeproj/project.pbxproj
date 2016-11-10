@@ -24,7 +24,6 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		70E33CBB4F294B00A47DCA5C /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B90072E0152F4BA4BA8DC9DE /* libAirMaps.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
-		876AC6111D904DDB00DF2242 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 876AC6101D904DDB00DF2242 /* Bolts.framework */; };
 		87B710E61D8854F200BCDA0B /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87B710E31D8854F200BCDA0B /* FBSDKCoreKit.framework */; };
 		87B710E71D8854F200BCDA0B /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87B710E41D8854F200BCDA0B /* FBSDKLoginKit.framework */; };
 		87B710E81D8854F200BCDA0B /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87B710E51D8854F200BCDA0B /* FBSDKShareKit.framework */; };
@@ -195,7 +194,6 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				DBD8E5A51D90223B00586B33 /* Bolts.framework in Frameworks */,
 				87B710E81D8854F200BCDA0B /* FBSDKShareKit.framework in Frameworks */,
-				876AC6111D904DDB00DF2242 /* Bolts.framework in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				70E33CBB4F294B00A47DCA5C /* libAirMaps.a in Frameworks */,
@@ -439,7 +437,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {

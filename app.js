@@ -31,7 +31,7 @@ AccessToken.getCurrentAccessToken().then((response) => {
 			  	navBarButtonColor: '#fff',
 		      	statusBarTextColorScheme: 'light'
 		    },
-			titleImage: require('./logo.png'), //navigation bar title image instead of the title text of the pushed screen (optional)
+			// titleImage: require('./logo.png'), //navigation bar title image instead of the title text of the pushed screen (optional)
 		    navigatorButtons: {
 		      	leftButtons: [{
 		      		title: 'Settings', // for a textual button, provide the button title (label)
