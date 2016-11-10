@@ -1,4 +1,4 @@
-### Crowd App
+# Crowd App
 
 Make sure you have:
 
@@ -12,7 +12,7 @@ Run in project directory
 npm install
 ```
 
-# To run on simulator:
+## To run on simulator:
 
 * Make sure the api is running
 * All links in the app point to `http://localhost:3000`
@@ -21,7 +21,7 @@ npm install
 * `npm start` in project directory
 * `react-native run-ios` in project directory
 
-# To run on iphone/device
+## To run on iphone/device
 
 * Make sure you are on the same wifi as api server
 * Server is running on `rails server -b 0.0.0.0`
