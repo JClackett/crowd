@@ -6,6 +6,7 @@ Make sure you have:
 * Npm
 * React
 * React-native
+* The Api cloned and running https://github.com/JClackett/crowd_api
 
 Run in project directory
 ```sh
